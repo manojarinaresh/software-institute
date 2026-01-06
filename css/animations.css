@@ -10,7 +10,7 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #2563eb, #10b981, #2563eb);
+    background: linear-gradient(90deg, #FF6B35, #00D9FF, #FFC857, #06FFA5, #FF6B35);
     background-size: 200% 100%;
     animation: gradientMove 3s linear infinite;
 }
@@ -34,7 +34,7 @@
     left: 0;
     width: 4px;
     height: 0;
-    background: linear-gradient(180deg, #2563eb, #10b981);
+    background: linear-gradient(180deg, #FF6B35, #00D9FF, #FFC857);
     transition: height 0.3s ease;
 }
 
@@ -118,7 +118,7 @@
 
 /* Add gradient text for headings */
 .section-title {
-    background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
+    background: linear-gradient(135deg, #FF6B35 0%, #00D9FF 50%, #FFC857 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -128,13 +128,13 @@
 .features {
     background-image: 
         linear-gradient(var(--bg-light) 0%, var(--bg-light) 100%),
-        repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(37, 99, 235, 0.03) 10px, rgba(37, 99, 235, 0.03) 20px);
+        repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 107, 53, 0.05) 10px, rgba(255, 107, 53, 0.05) 20px);
 }
 
 /* Enhance form inputs with focus effects */
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
     transform: translateY(-2px);
 }

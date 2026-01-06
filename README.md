@@ -1,4 +1,4 @@
-# Tech Masters Institute Website
+# Skyedge Technologies Website
 
 A modern, responsive website for a software training institute built with HTML, CSS, and JavaScript.
 
@@ -126,8 +126,8 @@ fetch('/api/contact', {
 
 ## 📞 Support
 
-For questions or support, contact: info@techmasters.com
+For questions or support, contact: info@skyedgetechnologies.com
 
 ---
 
-**© 2026 Tech Masters Institute. All rights reserved.**
+**© 2026 Skyedge Technologies. All rights reserved.**

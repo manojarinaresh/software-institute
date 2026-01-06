@@ -261,6 +261,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Log page load (for analytics - replace with actual analytics)
-    console.log('Tech Masters Institute website loaded successfully');
+    console.log('Skyedge Technologies website loaded successfully');
     console.log('Current page:', currentPage);
 });

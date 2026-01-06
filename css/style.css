@@ -6,16 +6,18 @@
 }
 
 :root {
-    --primary-color: #2563eb;
-    --secondary-color: #1e40af;
-    --accent-color: #10b981;
-    --text-dark: #1f2937;
-    --text-light: #6b7280;
-    --bg-light: #f9fafb;
+    --primary-color: #FF6B35;
+    --secondary-color: #F7931E;
+    --accent-color: #00D9FF;
+    --highlight-color: #FFC857;
+    --success-color: #06FFA5;
+    --text-dark: #2D3142;
+    --text-light: #5A6270;
+    --bg-light: #FFF8F0;
     --bg-white: #ffffff;
-    --border-color: #e5e7eb;
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+    --border-color: #FFE5D9;
+    --shadow: 0 4px 6px rgba(255, 107, 53, 0.15);
+    --shadow-lg: 0 10px 25px rgba(255, 107, 53, 0.25);
 }
 
 body {
@@ -86,8 +88,8 @@ body {
 
 /* ===== Hero Section ===== */
 .hero {
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.95) 0%, rgba(30, 64, 175, 0.95) 100%),
-                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%232563eb" width="1200" height="600"/><g fill="%231e40af" opacity="0.3"><circle cx="200" cy="100" r="80"/><circle cx="800" cy="400" r="100"/><circle cx="1000" cy="150" r="60"/><circle cx="400" cy="450" r="90"/></g></svg>');
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.95) 0%, rgba(247, 147, 30, 0.95) 50%, rgba(0, 217, 255, 0.95) 100%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23FF6B35" width="1200" height="600"/><g fill="%2300D9FF" opacity="0.3"><circle cx="200" cy="100" r="80"/><circle cx="800" cy="400" r="100"/><circle cx="1000" cy="150" r="60"/><circle cx="400" cy="450" r="90"/></g></svg>');
     background-size: cover;
     background-position: center;
     color: white;
@@ -226,7 +228,7 @@ body {
 .feature-icon {
     font-size: 3rem;
     margin-bottom: 1rem;
-    background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
+    background: linear-gradient(135deg, #FF6B35 0%, #FFC857 100%);
     width: 80px;
     height: 80px;
     margin: 0 auto 1rem;
@@ -234,7 +236,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4);
     transition: transform 0.3s ease;
 }
 
@@ -272,7 +274,7 @@ body {
 }
 
 .course-image {
-    background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
+    background: linear-gradient(135deg, #FF6B35 0%, #00D9FF 50%, #FFC857 100%);
     height: 200px;
     display: flex;
     align-items: center;
@@ -343,7 +345,7 @@ body {
 
 /* ===== Stats Section ===== */
 .stats {
-    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    background: linear-gradient(135deg, #FF6B35 0%, #F7931E 50%, #00D9FF 100%);
     color: white;
 }
 
@@ -366,7 +368,7 @@ body {
 
 /* ===== Page Header ===== */
 .page-header {
-    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    background: linear-gradient(135deg, #FF6B35 0%, #F7931E 50%, #00D9FF 100%);
     color: white;
     padding: 60px 0;
     text-align: center;
@@ -479,7 +481,7 @@ body {
     width: 120px;
     height: 120px;
     margin: 0 auto 1rem;
-    background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
+    background: linear-gradient(135deg, #FF6B35 0%, #00D9FF 100%);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -556,12 +558,13 @@ body {
 }
 
 .course-badge {
-    background-color: var(--accent-color);
+    background: linear-gradient(135deg, #06FFA5 0%, #00D9FF 100%);
     color: white;
     padding: 5px 15px;
     border-radius: 20px;
     font-size: 0.9rem;
     font-weight: 600;
+    box-shadow: 0 4px 10px rgba(6, 255, 165, 0.3);
 }
 
 .course-description {
