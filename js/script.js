@@ -38,32 +38,47 @@ document.addEventListener('DOMContentLoaded', function() {
     // Contact Form Handling
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form data
-            const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                course: document.getElementById('course').value,
-                message: document.getElementById('message').value
-            };
+        // Check if form has action attribute (FormSpree or other service)
+        const hasFormAction = contactForm.hasAttribute('action') && 
+                             contactForm.getAttribute('action') !== '' &&
+                             !contactForm.getAttribute('action').includes('YOUR_FORM_ID');
+        
+        if (!hasFormAction) {
+            // Only use JavaScript submission if no backend is configured
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form data
+                const formData = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    course: document.getElementById('course').value,
+                    message: document.getElementById('message').value
+                };
 
-            // Validate form
-            if (!formData.name || !formData.email || !formData.message) {
-                showFormMessage('Please fill in all required fields.', 'error');
-                return;
-            }
+                // Validate form
+                if (!formData.name || !formData.email || !formData.message) {
+                    showFormMessage('Please fill in all required fields.', 'error');
+                    return;
+                }
 
-            if (!isValidEmail(formData.email)) {
-                showFormMessage('Please enter a valid email address.', 'error');
-                return;
-            }
+                if (!isValidEmail(formData.email)) {
+                    showFormMessage('Please enter a valid email address.', 'error');
+                    return;
+                }
 
-            // Simulate form submission (replace with actual API call)
-            simulateFormSubmission(formData);
-        });
+                // Show warning that form needs setup
+                showFormMessage('⚠️ Form not configured yet! Please set up FormSpree or another service. Check CONTACT_FORM_SETUP.md for instructions.', 'error');
+            });
+        } else {
+            // FormSpree or other service is configured - show success after submission
+            contactForm.addEventListener('submit', function(e) {
+                const submitBtn = contactForm.querySelector('button[type="submit"]');
+                submitBtn.textContent = 'Sending...';
+                submitBtn.disabled = true;
+            });
+        }
     }
 
     // Form validation helper
@@ -78,54 +93,16 @@ document.addEventListener('DOMContentLoaded', function() {
         if (formMessage) {
             formMessage.textContent = message;
             formMessage.className = `form-message ${type}`;
+            formMessage.style.display = 'block';
             
-            // Hide message after 5 seconds
+            // Hide message after 8 seconds
             setTimeout(() => {
                 formMessage.style.display = 'none';
-            }, 5000);
+            }, 8000);
         }
     }
 
-    // Simulate form submission
-    function simulateFormSubmission(data) {
-        // Show loading state
-        const submitBtn = contactForm.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
-        submitBtn.textContent = 'Sending...';
-        submitBtn.disabled = true;
-
-        // Simulate API call with timeout
-        setTimeout(() => {
-            // Success
-            showFormMessage('Thank you for your message! We will get back to you soon.', 'success');
-            contactForm.reset();
-            
-            // Reset button
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
-
-            // In production, replace with actual API call:
-            // fetch('/api/contact', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify(data),
-            // })
-            // .then(response => response.json())
-            // .then(data => {
-            //     showFormMessage('Thank you for your message! We will get back to you soon.', 'success');
-            //     contactForm.reset();
-            // })
-            // .catch(error => {
-            //     showFormMessage('Something went wrong. Please try again later.', 'error');
-            // })
-            // .finally(() => {
-            //     submitBtn.textContent = originalText;
-            //     submitBtn.disabled = false;
-            // });
-        }, 1500);
-    }
+    // Remove old simulateFormSubmission function as it's no longer needed
 
     // Animate elements on scroll
     const observerOptions = {
