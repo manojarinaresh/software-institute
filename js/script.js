@@ -38,47 +38,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // Contact Form Handling
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
-        // Check if form has action attribute (FormSpree or other service)
-        const hasFormAction = contactForm.hasAttribute('action') && 
-                             contactForm.getAttribute('action') !== '' &&
-                             !contactForm.getAttribute('action').includes('YOUR_FORM_ID');
+        // Check for success parameter in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('success') === 'true') {
+            showFormMessage('✅ Thank you! Your message has been sent successfully. We will get back to you soon!', 'success');
+        }
         
-        if (!hasFormAction) {
-            // Only use JavaScript submission if no backend is configured
-            contactForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // Get form data
-                const formData = {
-                    name: document.getElementById('name').value,
-                    email: document.getElementById('email').value,
-                    phone: document.getElementById('phone').value,
-                    course: document.getElementById('course').value,
-                    message: document.getElementById('message').value
-                };
-
-                // Validate form
-                if (!formData.name || !formData.email || !formData.message) {
-                    showFormMessage('Please fill in all required fields.', 'error');
-                    return;
-                }
-
-                if (!isValidEmail(formData.email)) {
-                    showFormMessage('Please enter a valid email address.', 'error');
-                    return;
-                }
-
-                // Show warning that form needs setup
-                showFormMessage('⚠️ Form not configured yet! Please set up FormSpree or another service. Check CONTACT_FORM_SETUP.md for instructions.', 'error');
-            });
-        } else {
-            // FormSpree or other service is configured - show success after submission
-            contactForm.addEventListener('submit', function(e) {
-                const submitBtn = contactForm.querySelector('button[type="submit"]');
+        // Show loading state on submit
+        contactForm.addEventListener('submit', function(e) {
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            if (submitBtn) {
                 submitBtn.textContent = 'Sending...';
                 submitBtn.disabled = true;
-            });
-        }
+            }
+        });
     }
 
     // Form validation helper
