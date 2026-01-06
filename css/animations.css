@@ -1,0 +1,140 @@
+/* Additional Visual Enhancements */
+
+/* Add smooth gradient overlays to all sections */
+.features::before,
+.popular-courses::before,
+.about-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #2563eb, #10b981, #2563eb);
+    background-size: 200% 100%;
+    animation: gradientMove 3s linear infinite;
+}
+
+.features,
+.popular-courses,
+.about-content {
+    position: relative;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+}
+
+/* Add decorative elements to cards */
+.course-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 0;
+    background: linear-gradient(180deg, #2563eb, #10b981);
+    transition: height 0.3s ease;
+}
+
+.course-card {
+    position: relative;
+}
+
+.course-card:hover::before {
+    height: 100%;
+}
+
+/* Enhance buttons with gradient and shine effect */
+.btn-primary,
+.btn-small {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::before,
+.btn-small::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+}
+
+.btn-primary:hover::before,
+.btn-small:hover::before {
+    left: 100%;
+}
+
+/* Add floating animation to feature cards */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.feature-card {
+    animation: float 3s ease-in-out infinite;
+}
+
+.feature-card:nth-child(1) { animation-delay: 0s; }
+.feature-card:nth-child(2) { animation-delay: 0.5s; }
+.feature-card:nth-child(3) { animation-delay: 1s; }
+.feature-card:nth-child(4) { animation-delay: 1.5s; }
+
+/* Add shimmer effect to stats */
+.stat-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 200%; }
+}
+
+/* Add depth to images with multiple shadows */
+.course-image,
+.member-photo {
+    box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        0 4px 8px rgba(0, 0, 0, 0.1),
+        0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Add gradient text for headings */
+.section-title {
+    background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Add pattern background to sections */
+.features {
+    background-image: 
+        linear-gradient(var(--bg-light) 0%, var(--bg-light) 100%),
+        repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(37, 99, 235, 0.03) 10px, rgba(37, 99, 235, 0.03) 20px);
+}
+
+/* Enhance form inputs with focus effects */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    transform: translateY(-2px);
+}
