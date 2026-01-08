@@ -760,6 +760,19 @@ body {
     margin-bottom: 2rem;
 }
 
+.map-container {
+    background-color: var(--bg-white);
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.map-container iframe {
+    display: block;
+    width: 100%;
+}
+
 .map-placeholder {
     background-color: var(--bg-white);
     padding: 3rem;
