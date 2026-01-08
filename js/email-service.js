@@ -15,8 +15,14 @@ const EMAIL_CONFIG = {
     adminEmail: 'info@manojtechnologies.com' // Your admin email to receive notifications
 };
 
-// Initialize EmailJS (uncomment when you have credentials)
-// emailjs.init(EMAIL_CONFIG.userId);
+// Initialize EmailJS
+// TODO: Replace EMAIL_CONFIG values above with your actual EmailJS credentials from https://www.emailjs.com/
+if (EMAIL_CONFIG.userId !== 'YOUR_PUBLIC_KEY') {
+    emailjs.init(EMAIL_CONFIG.userId);
+} else {
+    console.warn('⚠️ EmailJS not configured. Please update EMAIL_CONFIG in email-service.js with your credentials.');
+    console.info('📧 Data is being stored locally. Run emailService.exportNotificationsAsCSV() to export.');
+}
 
 // Function to send registration notification
 async function sendRegistrationEmail(userData) {
@@ -51,9 +57,13 @@ async function sendRegistrationEmail(userData) {
     };
 
     try {
-        // Uncomment when EmailJS is configured
-        // await emailjs.send(EMAIL_CONFIG.serviceId, EMAIL_CONFIG.templateId, emailParams);
-        console.log('Registration email sent:', emailParams);
+        // Send email via EmailJS
+        if (EMAIL_CONFIG.userId !== 'YOUR_PUBLIC_KEY') {
+            await emailjs.send(EMAIL_CONFIG.serviceId, EMAIL_CONFIG.templateId, emailParams);
+            console.log('✅ Registration email sent successfully!');
+        } else {
+            console.log('⚠️ EmailJS not configured. Registration data stored locally.');
+        }
         
         // Also store in localStorage as backup
         storeNotification('registration', userData);
@@ -97,9 +107,13 @@ async function sendLoginEmail(userData) {
     };
 
     try {
-        // Uncomment when EmailJS is configured
-        // await emailjs.send(EMAIL_CONFIG.serviceId, EMAIL_CONFIG.templateId, emailParams);
-        console.log('Login email sent:', emailParams);
+        // Send email via EmailJS
+        if (EMAIL_CONFIG.userId !== 'YOUR_PUBLIC_KEY') {
+            await emailjs.send(EMAIL_CONFIG.serviceId, EMAIL_CONFIG.templateId, emailParams);
+            console.log('✅ Login email sent successfully!');
+        } else {
+            console.log('⚠️ EmailJS not configured. Login data stored locally.');
+        }
         
         // Store in localStorage as backup
         storeNotification('login', userData);
@@ -176,9 +190,13 @@ async function sendSubscriptionEmail(userData, subscriptionData) {
     };
 
     try {
-        // Uncomment when EmailJS is configured
-        // await emailjs.send(EMAIL_CONFIG.serviceId, EMAIL_CONFIG.templateId, emailParams);
-        console.log('Subscription email sent:', emailParams);
+        // Send email via EmailJS
+        if (EMAIL_CONFIG.userId !== 'YOUR_PUBLIC_KEY') {
+            await emailjs.send(EMAIL_CONFIG.serviceId, EMAIL_CONFIG.templateId, emailParams);
+            console.log('✅ Subscription email sent successfully!');
+        } else {
+            console.log('⚠️ EmailJS not configured. Subscription data stored locally.');
+        }
         
         // Store in localStorage as backup
         storeNotification('subscription', { user: userData, subscription: subscriptionData });
