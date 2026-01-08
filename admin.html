@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Manoj Technologies</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <style>
+        .admin-container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .admin-header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.5em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .stat-card h3 {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            margin: 0 0 10px 0;
+        }
+
+        .stat-card .value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 0;
+        }
+
+        .stat-card.revenue .value {
+            color: #48bb78;
+        }
+
+        .stat-card.users .value {
+            color: #4299e1;
+        }
+
+        .stat-card.logins .value {
+            color: #f6ad55;
+        }
+
+        .data-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            color: #2d3748;
+            font-size: 1.5em;
+        }
+
+        .btn-refresh, .btn-export {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-left: 10px;
+        }
+
+        .btn-refresh {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-refresh:hover {
+            background: #5a67d8;
+        }
+
+        .btn-export {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-export:hover {
+            background: #38a169;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .data-table th {
+            background: #f7fafc;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2d3748;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .data-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .data-table tr:hover {
+            background: #f7fafc;
+        }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .status-expired {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .status-expiring {
+            background: #feebc8;
+            color: #7c2d12;
+        }
+
+        .search-box {
+            padding: 12px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            width: 300px;
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+
+        .error-message {
+            background: #fed7d7;
+            color: #742a2a;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #718096;
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .data-table {
+                font-size: 0.85em;
+            }
+
+            .data-table th, .data-table td {
+                padding: 8px;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <svg class="logo" width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#2563eb;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect width="45" height="45" rx="10" fill="url(#logoGradient)"/>
+                    <text x="22.5" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white" text-anchor="middle">M</text>
+                    <circle cx="35" cy="12" r="4" fill="#fbbf24"/>
+                </svg>
+                <h1>Admin Dashboard</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="learning.html">Learning Portal</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <!-- Header -->
+        <div class="admin-header">
+            <h1>📊 Admin Dashboard</h1>
+            <p>Manage users, subscriptions, and view analytics</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card users">
+                <h3>Total Users</h3>
+                <p class="value" id="totalUsers">-</p>
+            </div>
+            <div class="stat-card">
+                <h3>Active Subscriptions</h3>
+                <p class="value" id="activeSubs">-</p>
+            </div>
+            <div class="stat-card revenue">
+                <h3>Total Revenue</h3>
+                <p class="value" id="totalRevenue">₹0</p>
+            </div>
+            <div class="stat-card logins">
+                <h3>Logins (24h)</h3>
+                <p class="value" id="logins24h">-</p>
+            </div>
+        </div>
+
+        <!-- All Users Section -->
+        <div class="data-section">
+            <div class="section-header">
+                <h2>👥 All Users</h2>
+                <div>
+                    <button class="btn-refresh" onclick="loadAllData()">🔄 Refresh</button>
+                    <button class="btn-export" onclick="exportUsers()">📥 Export CSV</button>
+                </div>
+            </div>
+            <input type="text" class="search-box" id="searchUsers" placeholder="Search users by name or email...">
+            <div id="usersTableContainer"></div>
+        </div>
+
+        <!-- Active Subscriptions Section -->
+        <div class="data-section">
+            <div class="section-header">
+                <h2>💳 Active Subscriptions</h2>
+                <div>
+                    <button class="btn-export" onclick="exportSubscriptions()">📥 Export CSV</button>
+                </div>
+            </div>
+            <input type="text" class="search-box" id="searchSubs" placeholder="Search subscriptions...">
+            <div id="subscriptionsTableContainer"></div>
+        </div>
+
+        <!-- Recent Logins Section -->
+        <div class="data-section">
+            <div class="section-header">
+                <h2>🔐 Recent Logins (Last 50)</h2>
+                <div>
+                    <button class="btn-export" onclick="exportLogins()">📥 Export CSV</button>
+                </div>
+            </div>
+            <div id="loginsTableContainer"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/supabase-db.js"></script>
+    <script>
+        let allUsers = [];
+        let allSubscriptions = [];
+        let allLogins = [];
+
+        // Load all data on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            loadAllData();
+        });
+
+        async function loadAllData() {
+            if (!window.supabaseClient || !isSupabaseEnabled()) {
+                showError('usersTableContainer', '⚠️ Supabase not configured. Please check your connection.');
+                showError('subscriptionsTableContainer', '⚠️ Supabase not configured.');
+                showError('loginsTableContainer', '⚠️ Supabase not configured.');
+                return;
+            }
+
+            try {
+                // Load statistics
+                await loadStatistics();
+                
+                // Load users
+                await loadUsers();
+                
+                // Load subscriptions
+                await loadSubscriptions();
+                
+                // Load recent logins
+                await loadLogins();
+                
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        async function loadStatistics() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('admin_statistics')
+                    .select('*')
+                    .single();
+
+                if (error) throw error;
+
+                if (data) {
+                    document.getElementById('totalUsers').textContent = data.total_users || 0;
+                    document.getElementById('activeSubs').textContent = data.active_subscriptions || 0;
+                    document.getElementById('totalRevenue').textContent = '₹' + (parseFloat(data.total_active_revenue) || 0).toLocaleString('en-IN');
+                    document.getElementById('logins24h').textContent = data.logins_last_24h || 0;
+                }
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+
+        async function loadUsers() {
+            showLoading('usersTableContainer');
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('users')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                allUsers = data || [];
+                displayUsers(allUsers);
+            } catch (error) {
+                showError('usersTableContainer', 'Error loading users: ' + error.message);
+            }
+        }
+
+        function displayUsers(users) {
+            const container = document.getElementById('usersTableContainer');
+            
+            if (users.length === 0) {
+                container.innerHTML = '<div class="empty-state">📭 No users found</div>';
+                return;
+            }
+
+            let html = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Registration Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            users.forEach(user => {
+                const date = new Date(user.created_at).toLocaleDateString('en-IN', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                html += `
+                    <tr>
+                        <td><strong>${user.name}</strong></td>
+                        <td>${user.email}</td>
+                        <td>${user.phone || '-'}</td>
+                        <td>${date}</td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        async function loadSubscriptions() {
+            showLoading('subscriptionsTableContainer');
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('active_subscriptions_view')
+                    .select('*')
+                    .order('expiry_date', { ascending: true });
+
+                if (error) throw error;
+
+                allSubscriptions = data || [];
+                displaySubscriptions(allSubscriptions);
+            } catch (error) {
+                showError('subscriptionsTableContainer', 'Error loading subscriptions: ' + error.message);
+            }
+        }
+
+        function displaySubscriptions(subscriptions) {
+            const container = document.getElementById('subscriptionsTableContainer');
+            
+            if (subscriptions.length === 0) {
+                container.innerHTML = '<div class="empty-state">📭 No active subscriptions</div>';
+                return;
+            }
+
+            let html = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Plan</th>
+                            <th>Amount</th>
+                            <th>Start Date</th>
+                            <th>Expiry Date</th>
+                            <th>Days Left</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            subscriptions.forEach(sub => {
+                const startDate = new Date(sub.start_date).toLocaleDateString('en-IN');
+                const expiryDate = new Date(sub.expiry_date).toLocaleDateString('en-IN');
+                const daysLeft = Math.ceil(sub.days_remaining);
+                
+                let statusClass = 'status-active';
+                if (sub.subscription_status === 'Expired') {
+                    statusClass = 'status-expired';
+                } else if (sub.subscription_status === 'Expiring Soon') {
+                    statusClass = 'status-expiring';
+                }
+
+                html += `
+                    <tr>
+                        <td><strong>${sub.name}</strong></td>
+                        <td>${sub.email}</td>
+                        <td>${sub.plan}</td>
+                        <td>₹${parseFloat(sub.amount).toLocaleString('en-IN')}</td>
+                        <td>${startDate}</td>
+                        <td>${expiryDate}</td>
+                        <td>${daysLeft > 0 ? daysLeft : 0} days</td>
+                        <td><span class="status-badge ${statusClass}">${sub.subscription_status}</span></td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        async function loadLogins() {
+            showLoading('loginsTableContainer');
+
+            try {
+                const { data: logins, error } = await supabaseClient
+                    .from('login_history')
+                    .select(`
+                        *,
+                        users (name, email)
+                    `)
+                    .order('login_time', { ascending: false })
+                    .limit(50);
+
+                if (error) throw error;
+
+                allLogins = logins || [];
+                displayLogins(allLogins);
+            } catch (error) {
+                showError('loginsTableContainer', 'Error loading logins: ' + error.message);
+            }
+        }
+
+        function displayLogins(logins) {
+            const container = document.getElementById('loginsTableContainer');
+            
+            if (logins.length === 0) {
+                container.innerHTML = '<div class="empty-state">📭 No login history</div>';
+                return;
+            }
+
+            let html = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Login Time</th>
+                            <th>Device Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            logins.forEach(login => {
+                const loginTime = new Date(login.login_time).toLocaleString('en-IN', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                html += `
+                    <tr>
+                        <td><strong>${login.users?.name || 'Unknown'}</strong></td>
+                        <td>${login.users?.email || '-'}</td>
+                        <td>${loginTime}</td>
+                        <td>${login.device_type || 'Unknown'}</td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        // Search functionality
+        document.getElementById('searchUsers')?.addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase();
+            const filtered = allUsers.filter(user => 
+                user.name.toLowerCase().includes(query) || 
+                user.email.toLowerCase().includes(query)
+            );
+            displayUsers(filtered);
+        });
+
+        document.getElementById('searchSubs')?.addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase();
+            const filtered = allSubscriptions.filter(sub => 
+                sub.name.toLowerCase().includes(query) || 
+                sub.email.toLowerCase().includes(query) ||
+                sub.plan.toLowerCase().includes(query)
+            );
+            displaySubscriptions(filtered);
+        });
+
+        // Export functions
+        function exportUsers() {
+            if (allUsers.length === 0) {
+                alert('No users to export');
+                return;
+            }
+
+            let csv = 'Name,Email,Phone,Registration Date\n';
+            allUsers.forEach(user => {
+                csv += `"${user.name}","${user.email}","${user.phone || ''}","${new Date(user.created_at).toLocaleString()}"\n`;
+            });
+
+            downloadCSV(csv, 'users.csv');
+        }
+
+        function exportSubscriptions() {
+            if (allSubscriptions.length === 0) {
+                alert('No subscriptions to export');
+                return;
+            }
+
+            let csv = 'User,Email,Plan,Amount,Start Date,Expiry Date,Status\n';
+            allSubscriptions.forEach(sub => {
+                csv += `"${sub.name}","${sub.email}","${sub.plan}","₹${sub.amount}","${new Date(sub.start_date).toLocaleDateString()}","${new Date(sub.expiry_date).toLocaleDateString()}","${sub.subscription_status}"\n`;
+            });
+
+            downloadCSV(csv, 'subscriptions.csv');
+        }
+
+        function exportLogins() {
+            if (allLogins.length === 0) {
+                alert('No logins to export');
+                return;
+            }
+
+            let csv = 'User,Email,Login Time,Device Type\n';
+            allLogins.forEach(login => {
+                csv += `"${login.users?.name || 'Unknown'}","${login.users?.email || '-'}","${new Date(login.login_time).toLocaleString()}","${login.device_type || 'Unknown'}"\n`;
+            });
+
+            downloadCSV(csv, 'logins.csv');
+        }
+
+        function downloadCSV(csv, filename) {
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function showLoading(containerId) {
+            document.getElementById(containerId).innerHTML = '<div class="loading">⏳ Loading data...</div>';
+        }
+
+        function showError(containerId, message) {
+            document.getElementById(containerId).innerHTML = `<div class="error-message">${message}</div>`;
+        }
+    </script>
+</body>
+</html>

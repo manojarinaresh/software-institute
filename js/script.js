@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===== Login Functionality =====
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
+        loginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const email = document.getElementById('email').value.trim();
@@ -291,56 +291,101 @@ document.addEventListener('DOMContentLoaded', function() {
             const rememberMe = document.getElementById('rememberMe').checked;
             const messageDiv = document.getElementById('loginMessage');
             
-            console.log('Login attempt:', email); // Debug log
+            console.log('Login attempt:', email);
             
-            // Get all registered users from localStorage
-            const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-            console.log('Available users:', users.length); // Debug log
-            
-            // Find user by email
-            const user = users.find(u => u.email === email && u.password === password);
-            
-            if (user) {
-                console.log('Login successful for:', email); // Debug log
+            // Try Supabase first, fallback to localStorage
+            if (window.dbHelpers) {
+                const result = await window.dbHelpers.loginUser(email, password);
                 
-                // Store user session in BOTH localStorage and sessionStorage for reliability
-                const userData = {
-                    email: user.email,
-                    name: user.name,
-                    phone: user.phone,
-                    subscription: user.subscription || null,
-                    loginTime: new Date().toISOString()
-                };
-                
-                // Always store in localStorage for persistent login
-                localStorage.setItem('currentUser', JSON.stringify(userData));
-                
-                // Also store in sessionStorage as backup
-                sessionStorage.setItem('currentUser', JSON.stringify(userData));
-                
-                // Send login email notification
-                if (window.emailService) {
-                    window.emailService.sendLoginEmail(userData);
+                if (result.success) {
+                    console.log('✅ Logged in from Supabase database');
+                    
+                    // Get user subscription from database
+                    const subscription = await window.dbHelpers.getUserSubscription(result.user.id);
+                    
+                    // Store user session
+                    const userData = {
+                        id: result.user.id,
+                        email: result.user.email,
+                        name: result.user.name,
+                        phone: result.user.phone,
+                        subscription: subscription,
+                        loginTime: new Date().toISOString()
+                    };
+                    
+                    localStorage.setItem('currentUser', JSON.stringify(userData));
+                    sessionStorage.setItem('currentUser', JSON.stringify(userData));
+                    
+                    // Send login email notification
+                    if (window.emailService) {
+                        window.emailService.sendLoginEmail(userData);
+                        
+                        // Log email notification to database
+                        await window.dbHelpers.logEmailNotification('login', email, result.user.name, {
+                            subscription_status: subscription ? 'active' : 'none'
+                        });
+                    }
+                    
+                    messageDiv.className = 'form-message success';
+                    messageDiv.textContent = '✓ Login successful! Redirecting...';
+                    messageDiv.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'learning.html';
+                    }, 500);
+                    
+                } else if (result.fallback) {
+                    // Supabase failed, use localStorage fallback
+                    console.warn('⚠️ Supabase unavailable, using localStorage');
+                    loginWithLocalStorage();
+                } else {
+                    // Login failed
+                    messageDiv.className = 'form-message error';
+                    messageDiv.textContent = '✗ ' + result.error;
+                    messageDiv.style.display = 'block';
                 }
-                
-                console.log('User data saved, redirecting...'); // Debug log
-                
-                // Show success message
-                messageDiv.className = 'form-message success';
-                messageDiv.textContent = '✓ Login successful! Redirecting...';
-                messageDiv.style.display = 'block';
-                
-                // Redirect to learning portal
-                setTimeout(() => {
-                    window.location.href = 'learning.html';
-                }, 500);
             } else {
-                console.log('Login failed for:', email); // Debug log
+                // dbHelpers not loaded, use localStorage
+                console.warn('⚠️ Database helpers not loaded, using localStorage');
+                loginWithLocalStorage();
+            }
+            
+            // LocalStorage fallback function
+            function loginWithLocalStorage() {
+                const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+                const user = users.find(u => u.email === email && u.password === password);
                 
-                // Show error message
-                messageDiv.className = 'form-message error';
-                messageDiv.textContent = '✗ Invalid email or password. Please try again.';
-                messageDiv.style.display = 'block';
+                if (user) {
+                    console.log('Login successful for:', email);
+                    
+                    const userData = {
+                        email: user.email,
+                        name: user.name,
+                        phone: user.phone,
+                        subscription: user.subscription || null,
+                        loginTime: new Date().toISOString()
+                    };
+                    
+                    localStorage.setItem('currentUser', JSON.stringify(userData));
+                    sessionStorage.setItem('currentUser', JSON.stringify(userData));
+                    
+                    if (window.emailService) {
+                        window.emailService.sendLoginEmail(userData);
+                    }
+                    
+                    messageDiv.className = 'form-message success';
+                    messageDiv.textContent = '✓ Login successful! Redirecting...';
+                    messageDiv.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'learning.html';
+                    }, 500);
+                } else {
+                    console.log('Login failed for:', email);
+                    messageDiv.className = 'form-message error';
+                    messageDiv.textContent = '✗ Invalid email or password!';
+                    messageDiv.style.display = 'block';
+                }
             }
         });
     }
@@ -374,52 +419,95 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // Get existing users
-            const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-            
-            // Check if email already exists
-            if (users.some(u => u.email === email)) {
-                messageDiv.className = 'form-message error';
-                messageDiv.textContent = '✗ Email already registered! Please login instead.';
-                messageDiv.style.display = 'block';
-                return;
+            // Try Supabase first, fallback to localStorage
+            if (window.dbHelpers) {
+                const result = await window.dbHelpers.registerUser(fullName, email, phone, password);
+                
+                if (result.success) {
+                    // Registration successful in Supabase
+                    console.log('✅ Registered in Supabase database');
+                    
+                    // Send registration email notification (without password)
+                    if (window.emailService) {
+                        const sanitizedUserData = {
+                            name: fullName,
+                            email: email,
+                            phone: phone,
+                            registrationDate: new Date().toISOString()
+                        };
+                        window.emailService.sendRegistrationEmail(sanitizedUserData);
+                        
+                        // Log email notification to database
+                        await window.dbHelpers.logEmailNotification('registration', email, fullName, {
+                            phone: phone
+                        });
+                    }
+                    
+                    messageDiv.className = 'form-message success';
+                    messageDiv.textContent = '✓ Registration successful! Redirecting to login...';
+                    messageDiv.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                    
+                } else if (result.fallback) {
+                    // Supabase failed, use localStorage fallback
+                    console.warn('⚠️ Supabase unavailable, using localStorage');
+                    registerWithLocalStorage();
+                } else {
+                    // Registration failed with specific error
+                    messageDiv.className = 'form-message error';
+                    messageDiv.textContent = '✗ ' + result.error;
+                    messageDiv.style.display = 'block';
+                }
+            } else {
+                // dbHelpers not loaded, use localStorage
+                console.warn('⚠️ Database helpers not loaded, using localStorage');
+                registerWithLocalStorage();
             }
             
-            // Create new user
-            const newUser = {
-                name: fullName,
-                email: email,
-                phone: phone,
-                password: password,
-                registrationDate: new Date().toISOString(),
-                subscription: null
-            };
-            
-            // Add user to array and save
-            users.push(newUser);
-            localStorage.setItem('registeredUsers', JSON.stringify(users));
-            
-            // Send registration email notification (without password for security)
-            if (window.emailService) {
-                const sanitizedUserData = {
-                    name: newUser.name,
-                    email: newUser.email,
-                    phone: newUser.phone,
-                    registrationDate: newUser.registrationDate
-                    // Password is intentionally excluded from email notification
+            // LocalStorage fallback function
+            function registerWithLocalStorage() {
+                const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+                
+                if (users.some(u => u.email === email)) {
+                    messageDiv.className = 'form-message error';
+                    messageDiv.textContent = '✗ Email already registered! Please login instead.';
+                    messageDiv.style.display = 'block';
+                    return;
+                }
+                
+                const newUser = {
+                    name: fullName,
+                    email: email,
+                    phone: phone,
+                    password: password,
+                    registrationDate: new Date().toISOString(),
+                    subscription: null
                 };
-                window.emailService.sendRegistrationEmail(sanitizedUserData);
+                
+                users.push(newUser);
+                localStorage.setItem('registeredUsers', JSON.stringify(users));
+                
+                if (window.emailService) {
+                    const sanitizedUserData = {
+                        name: newUser.name,
+                        email: newUser.email,
+                        phone: newUser.phone,
+                        registrationDate: newUser.registrationDate
+                    };
+                    window.emailService.sendRegistrationEmail(sanitizedUserData);
+                }
+                
+                messageDiv.className = 'form-message success';
+                messageDiv.textContent = '✓ Registration successful! Redirecting to login...';
+                messageDiv.style.display = 'block';
+                
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
             }
-            
-            // Show success message
-            messageDiv.className = 'form-message success';
-            messageDiv.textContent = '✓ Registration successful! Redirecting to login...';
-            messageDiv.style.display = 'block';
-            
-            // Redirect to login
-            setTimeout(() => {
-                window.location.href = 'login.html';
-            }, 2000);
         });
     }
 
@@ -626,7 +714,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Payment form submission
     if (paymentForm) {
-        paymentForm.addEventListener('submit', function(e) {
+        paymentForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             // Get current user
@@ -647,6 +735,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const expiryDate = new Date();
             expiryDate.setDate(expiryDate.getDate() + selectedPlan.duration);
             
+            // Get last 4 digits of card (for security)
+            const cardLast4 = cardNumber.slice(-4);
+            
             // Create subscription data
             const subscriptionData = {
                 plan: selectedPlan.plan.charAt(0).toUpperCase() + selectedPlan.plan.slice(1) + ' Plan',
@@ -659,41 +750,93 @@ document.addEventListener('DOMContentLoaded', function() {
                 transactionId: 'TXN-' + Date.now()
             };
             
-            // Update user subscription
-            user.subscription = {
-                plan: subscriptionData.plan,
-                price: subscriptionData.amount,
-                startDate: subscriptionData.startDate,
-                expiryDate: subscriptionData.expiryDate,
-                duration: subscriptionData.duration
-            };
-            
-            // Save updated user to BOTH storages
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            sessionStorage.setItem('currentUser', JSON.stringify(user));
-            
-            // Update in registered users
-            const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-            const userIndex = users.findIndex(u => u.email === user.email);
-            if (userIndex !== -1) {
-                users[userIndex].subscription = user.subscription;
-                localStorage.setItem('registeredUsers', JSON.stringify(users));
+            // Try Supabase first
+            if (window.dbHelpers && user.id) {
+                const paymentData = {
+                    transactionId: subscriptionData.transactionId,
+                    paymentMethod: 'card',
+                    cardLast4: cardLast4
+                };
+                
+                const result = await window.dbHelpers.createSubscription(
+                    user.id,
+                    selectedPlan.plan,
+                    parseFloat(selectedPlan.price),
+                    selectedPlan.plan, // duration type
+                    paymentData
+                );
+                
+                if (result.success) {
+                    console.log('✅ Subscription saved to Supabase');
+                    
+                    // Update local session
+                    user.subscription = result.subscription;
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    sessionStorage.setItem('currentUser', JSON.stringify(user));
+                    
+                    // Send email notification
+                    if (window.emailService) {
+                        window.emailService.sendSubscriptionEmail(user, subscriptionData);
+                        
+                        // Log email notification to database
+                        await window.dbHelpers.logEmailNotification('subscription', user.email, user.name, {
+                            plan: selectedPlan.plan,
+                            amount: selectedPlan.price,
+                            duration: selectedPlan.duration
+                        });
+                    }
+                    
+                    alert('🎉 Payment Successful!\n\nYour subscription has been activated.\nExpiry Date: ' + expiryDate.toLocaleDateString() + '\n\nEnjoy unlimited access to all courses!');
+                    closePaymentModal();
+                    
+                    setTimeout(() => {
+                        window.location.href = 'learning.html';
+                    }, 1000);
+                    
+                } else if (result.fallback) {
+                    // Supabase failed, use localStorage
+                    console.warn('⚠️ Supabase unavailable, using localStorage');
+                    saveSubscriptionToLocalStorage();
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } else {
+                // No Supabase or no user ID, use localStorage
+                console.warn('⚠️ Using localStorage for subscription');
+                saveSubscriptionToLocalStorage();
             }
             
-            // Send subscription email notification
-            if (window.emailService) {
-                window.emailService.sendSubscriptionEmail(user, subscriptionData);
+            // LocalStorage fallback function
+            function saveSubscriptionToLocalStorage() {
+                user.subscription = {
+                    plan: subscriptionData.plan,
+                    price: subscriptionData.amount,
+                    startDate: subscriptionData.startDate,
+                    expiryDate: subscriptionData.expiryDate,
+                    duration: subscriptionData.duration
+                };
+                
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                sessionStorage.setItem('currentUser', JSON.stringify(user));
+                
+                const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+                const userIndex = users.findIndex(u => u.email === user.email);
+                if (userIndex !== -1) {
+                    users[userIndex].subscription = user.subscription;
+                    localStorage.setItem('registeredUsers', JSON.stringify(users));
+                }
+                
+                if (window.emailService) {
+                    window.emailService.sendSubscriptionEmail(user, subscriptionData);
+                }
+                
+                alert('🎉 Payment Successful!\n\nYour subscription has been activated.\nExpiry Date: ' + expiryDate.toLocaleDateString() + '\n\nEnjoy unlimited access to all courses!');
+                closePaymentModal();
+                
+                setTimeout(() => {
+                    window.location.href = 'learning.html';
+                }, 1000);
             }
-            
-            // Show success and redirect
-            alert('🎉 Payment Successful!\n\nYour subscription has been activated.\nExpiry Date: ' + expiryDate.toLocaleDateString() + '\n\nEnjoy unlimited access to all courses!');
-            
-            closePaymentModal();
-            
-            // Redirect to learning portal
-            setTimeout(() => {
-                window.location.href = 'learning.html';
-            }, 1000);
         });
     }
     
