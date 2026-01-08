@@ -49,9 +49,26 @@ body {
     padding: 1rem 20px;
 }
 
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.nav-brand .logo {
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.nav-brand:hover .logo {
+    transform: scale(1.1) rotate(5deg);
+}
+
 .nav-brand h1 {
     color: var(--primary-color);
     font-size: 1.5rem;
+    margin: 0;
 }
 
 .nav-menu {
