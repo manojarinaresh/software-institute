@@ -44,14 +44,97 @@
     <!-- Subscription Header -->
     <section class="portal-header">
         <div class="container">
-            <h2>Choose Your Learning Plan 🚀</h2>
-            <p>Unlock unlimited access to all video courses and learning materials</p>
+            <h2>Subscribe to Our Course 🚀</h2>
+            <p>Start your learning journey with Cloud Computing & DevOps</p>
+        </div>
+    </section>
+
+    <!-- Course Overview Section -->
+    <section class="course-overview-section" id="courseSection">
+        <div class="container">
+            <div class="course-overview-card">
+                <div class="course-overview-header">
+                    <h2>☁️ Cloud Computing & DevOps</h2>
+                    <span class="course-badge" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">Professional Course</span>
+                </div>
+                <div class="course-overview-content">
+                    <p class="course-description" style="font-size: 1.1rem; line-height: 1.6; color: var(--text-color); margin-bottom: 25px;">
+                        Master cloud platforms and DevOps practices. Learn to deploy, manage, and scale applications on AWS, Azure, and Google Cloud. Get hands-on experience with industry-leading tools and technologies.
+                    </p>
+                    
+                    <div class="course-info-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 25px;">
+                        <div class="info-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 10px; text-align: center; color: white;">
+                            <div style="font-size: 2rem; margin-bottom: 5px;">⏱️</div>
+                            <div style="font-weight: bold;">Duration</div>
+                            <div>4 Months</div>
+                        </div>
+                        <div class="info-box" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 20px; border-radius: 10px; text-align: center; color: white;">
+                            <div style="font-size: 2rem; margin-bottom: 5px;">👥</div>
+                            <div style="font-weight: bold;">Students</div>
+                            <div>150+ Enrolled</div>
+                        </div>
+                        <div class="info-box" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 20px; border-radius: 10px; text-align: center; color: white;">
+                            <div style="font-size: 2rem; margin-bottom: 5px;">📚</div>
+                            <div style="font-weight: bold;">Level</div>
+                            <div>Intermediate - Advanced</div>
+                        </div>
+                    </div>
+
+                    <div class="curriculum-preview" style="background: #f8f9fa; padding: 25px; border-radius: 10px; margin-bottom: 25px;">
+                        <h3 style="color: var(--primary-color); margin-bottom: 15px;">📋 What You'll Learn:</h3>
+                        <ul style="list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px;">
+                            <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                                <span style="position: absolute; left: 0; color: #10b981;">✓</span>
+                                AWS, Azure, and GCP fundamentals
+                            </li>
+                            <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                                <span style="position: absolute; left: 0; color: #10b981;">✓</span>
+                                Docker and Kubernetes orchestration
+                            </li>
+                            <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                                <span style="position: absolute; left: 0; color: #10b981;">✓</span>
+                                CI/CD pipelines with Jenkins & GitLab
+                            </li>
+                            <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                                <span style="position: absolute; left: 0; color: #10b981;">✓</span>
+                                Infrastructure as Code (Terraform, Ansible)
+                            </li>
+                            <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                                <span style="position: absolute; left: 0; color: #10b981;">✓</span>
+                                Monitoring with Prometheus & Grafana
+                            </li>
+                            <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                                <span style="position: absolute; left: 0; color: #10b981;">✓</span>
+                                Security best practices & compliance
+                            </li>
+                            <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                                <span style="position: absolute; left: 0; color: #10b981;">✓</span>
+                                Microservices architecture
+                            </li>
+                            <li style="padding: 8px 0; padding-left: 25px; position: relative;">
+                                <span style="position: absolute; left: 0; color: #10b981;">✓</span>
+                                Serverless computing
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <button class="btn btn-primary btn-large" id="viewPlansBtn" style="padding: 15px 40px; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                            View Subscription Plans →
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Subscription Plans -->
-    <section class="subscription-section">
+    <section class="subscription-section" id="plansSection" style="display: none;">
         <div class="container">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <h2 style="color: var(--primary-color); margin-bottom: 10px;">Choose Your Learning Plan</h2>
+                <p style="color: var(--text-light);">Select a subscription plan to start learning</p>
+            </div>
             <div class="subscription-plans">
                 <!-- Monthly Plan -->
                 <div class="plan-card">

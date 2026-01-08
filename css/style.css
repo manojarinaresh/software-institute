@@ -1623,6 +1623,39 @@ body {
 }
 
 /* ===== Subscription Page Styles ===== */
+.course-overview-section {
+    padding: 60px 0;
+    background-color: var(--bg-light);
+}
+
+.course-overview-card {
+    background: var(--bg-white);
+    border-radius: 20px;
+    padding: 50px;
+    box-shadow: var(--shadow-lg);
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.course-overview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.course-overview-header h2 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin: 0;
+}
+
+.course-overview-content {
+    color: var(--text-color);
+}
+
 .subscription-section {
     padding: 60px 0;
     background-color: var(--bg-light);

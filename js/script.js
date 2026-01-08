@@ -682,6 +682,22 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // ===== Subscription Page - Course to Plans Flow =====
+    const viewPlansBtn = document.getElementById('viewPlansBtn');
+    const courseSection = document.getElementById('courseSection');
+    const plansSection = document.getElementById('plansSection');
+    
+    if (viewPlansBtn && courseSection && plansSection) {
+        viewPlansBtn.addEventListener('click', function() {
+            // Hide course section and show plans section
+            courseSection.style.display = 'none';
+            plansSection.style.display = 'block';
+            
+            // Smooth scroll to plans section
+            plansSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    }
+
     // ===== Subscription Payment Functionality =====
     const subscribeButtons = document.querySelectorAll('.btn-subscribe');
     const paymentModal = document.getElementById('paymentModal');
