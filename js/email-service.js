@@ -9,9 +9,9 @@
 // All sensitive data is excluded from emails and localStorage
 
 const EMAIL_CONFIG = {
-    serviceId: 'YOUR_SERVICE_ID',  // Replace with your EmailJS Service ID
-    templateId: 'YOUR_TEMPLATE_ID', // Replace with your EmailJS Template ID
-    userId: 'YOUR_PUBLIC_KEY',      // Replace with your EmailJS Public Key
+    serviceId: 'service_72v3kho',  // ✅ EmailJS Service ID configured
+    templateId: 'template_3f2t3mb', // ✅ EmailJS Template ID configured
+    userId: 'jVVcQxc9q4_tOUuwz',      // ✅ EmailJS Public Key configured
     adminEmail: 'info@manojtechnologies.com' // Your admin email to receive notifications
 };
 
