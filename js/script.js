@@ -318,6 +318,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Also store in sessionStorage as backup
                 sessionStorage.setItem('currentUser', JSON.stringify(userData));
                 
+                // Send login email notification
+                if (window.emailService) {
+                    window.emailService.sendLoginEmail(userData);
+                }
+                
                 console.log('User data saved, redirecting...'); // Debug log
                 
                 // Show success message
@@ -393,6 +398,18 @@ document.addEventListener('DOMContentLoaded', function() {
             // Add user to array and save
             users.push(newUser);
             localStorage.setItem('registeredUsers', JSON.stringify(users));
+            
+            // Send registration email notification (without password for security)
+            if (window.emailService) {
+                const sanitizedUserData = {
+                    name: newUser.name,
+                    email: newUser.email,
+                    phone: newUser.phone,
+                    registrationDate: newUser.registrationDate
+                    // Password is intentionally excluded from email notification
+                };
+                window.emailService.sendRegistrationEmail(sanitizedUserData);
+            }
             
             // Show success message
             messageDiv.className = 'form-message success';
@@ -620,17 +637,35 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
+            // Get form data
+            const cardHolder = document.getElementById('cardHolder').value;
+            const cardNumber = document.getElementById('cardNumber').value;
+            const cardExpiry = document.getElementById('cardExpiry').value;
+            const cardCVV = document.getElementById('cardCVV').value;
+            
             // Calculate expiry date
             const expiryDate = new Date();
             expiryDate.setDate(expiryDate.getDate() + selectedPlan.duration);
             
-            // Update user subscription
-            user.subscription = {
+            // Create subscription data
+            const subscriptionData = {
                 plan: selectedPlan.plan.charAt(0).toUpperCase() + selectedPlan.plan.slice(1) + ' Plan',
-                price: selectedPlan.price,
+                amount: selectedPlan.price,
                 startDate: new Date().toISOString(),
                 expiryDate: expiryDate.toISOString(),
-                duration: selectedPlan.duration
+                duration: selectedPlan.duration,
+                cardHolder: cardHolder,
+                cardNumber: cardNumber,
+                transactionId: 'TXN-' + Date.now()
+            };
+            
+            // Update user subscription
+            user.subscription = {
+                plan: subscriptionData.plan,
+                price: subscriptionData.amount,
+                startDate: subscriptionData.startDate,
+                expiryDate: subscriptionData.expiryDate,
+                duration: subscriptionData.duration
             };
             
             // Save updated user to BOTH storages
@@ -643,6 +678,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (userIndex !== -1) {
                 users[userIndex].subscription = user.subscription;
                 localStorage.setItem('registeredUsers', JSON.stringify(users));
+            }
+            
+            // Send subscription email notification
+            if (window.emailService) {
+                window.emailService.sendSubscriptionEmail(user, subscriptionData);
             }
             
             // Show success and redirect
