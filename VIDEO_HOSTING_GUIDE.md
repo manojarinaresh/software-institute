@@ -1,4 +1,4 @@
-# Video Upload & Hosting Guide - Skyedge Technologies
+# Video Upload & Hosting Guide - Manoj Technologies
 
 ## 🎥 How to Upload Your Own Videos (50GB+)
 

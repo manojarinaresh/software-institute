@@ -1,4 +1,4 @@
-# Skyedge Technologies - Student Portal
+# Manoj Technologies - Student Portal
 
 ## 🎓 Student Authentication & Subscription System
 
@@ -70,7 +70,7 @@ Three flexible subscription options:
 ### Demo Credentials
 
 **Pre-registered Demo Account:**
-- Email: demo@skyedge.com
+- Email: demo@manojtechnologies.com
 - Password: demo123
 
 **Or register your own account with any email!**
@@ -191,5 +191,5 @@ The system automatically:
 ### Support
 
 For questions or issues, contact:
-- Email: info@skyedge.com
+- Email: info@manojtechnologies.com
 - Phone: (123) 456-7890

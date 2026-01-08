@@ -1,4 +1,4 @@
-# Skyedge Technologies Website
+# Manoj Technologies Website
 
 A modern, responsive website for a software training institute built with HTML, CSS, and JavaScript.
 
@@ -126,8 +126,8 @@ fetch('/api/contact', {
 
 ## 📞 Support
 
-For questions or support, contact: info@skyedgetechnologies.com
+For questions or support, contact: info@manojtechnologies.com
 
 ---
 
-**© 2026 Skyedge Technologies. All rights reserved.**
+**© 2026 Manoj Technologies. All rights reserved.**

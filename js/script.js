@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===== Initialize Demo User =====
     // Clear old demo user and reinitialize with new email
     const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-    const hasNewDemo = existingUsers.some(u => u.email === 'demo@manojtech.com');
+    const hasNewDemo = existingUsers.some(u => u.email === 'demo@manojtechnologies.com');
     
     if (!hasNewDemo) {
         // Remove old demo user if exists
@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add new demo user
         updatedUsers.push({
             name: 'Demo Student',
-            email: 'demo@manojtech.com',
+            email: 'demo@manojtechnologies.com',
             phone: '1234567890',
             password: 'demo123',
             registrationDate: new Date().toISOString(),
