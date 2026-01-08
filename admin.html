@@ -273,6 +273,24 @@
         </div>
     </div>
 
+    <!-- Change Password Modal -->
+    <div id="changePasswordModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 40px; border-radius: 15px; max-width: 450px; width: 90%; text-align: center;">
+            <h2 style="margin: 0 0 10px 0; color: #2d3748;">🔑 Change Admin Password</h2>
+            <p style="color: #718096; margin-bottom: 30px;">Update your admin dashboard password</p>
+            
+            <input type="password" id="currentPassword" placeholder="Current password" style="width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1em; margin-bottom: 15px;">
+            <input type="password" id="newPassword" placeholder="New password" style="width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1em; margin-bottom: 15px;">
+            <input type="password" id="confirmPassword" placeholder="Confirm new password" style="width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1em; margin-bottom: 20px;">
+            
+            <div id="changePasswordError" style="color: #e53e3e; margin-bottom: 15px; display: none;"></div>
+            <div id="changePasswordSuccess" style="color: #38a169; margin-bottom: 15px; display: none;"></div>
+            
+            <button onclick="changePassword()" style="width: 100%; padding: 15px; background: #48bb78; color: white; border: none; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer; margin-bottom: 10px;">Update Password</button>
+            <button onclick="closeChangePasswordModal()" style="width: 100%; padding: 15px; background: transparent; color: #718096; border: none; border-radius: 8px; font-size: 0.9em; cursor: pointer;">Cancel</button>
+        </div>
+    </div>
+
     <div class="admin-container" id="adminContent" style="display: none;">
         <!-- Header -->
         <div class="admin-header">
@@ -298,6 +316,17 @@
                 <h3>Logins (24h)</h3>
                 <p class="value" id="logins24h">-</p>
             </div>
+        </div>
+
+        <!-- Admin Settings Section -->
+        <div class="data-section">
+            <div class="section-header">
+                <h2>⚙️ Admin Settings</h2>
+                <div>
+                    <button class="btn-refresh" onclick="openChangePasswordModal()">🔑 Change Password</button>
+                </div>
+            </div>
+            <p style="color: #718096;">Manage your admin account settings and security options.</p>
         </div>
 
         <!-- All Users Section -->
@@ -341,8 +370,10 @@
     <script src="js/supabase-config.js"></script>
     <script src="js/supabase-db.js"></script>
     <script>
-        // Password protection
-        const ADMIN_PASSWORD = 'manojadmin123'; // Change this to your secure password
+        // Password protection - get from localStorage or use default
+        function getAdminPassword() {
+            return localStorage.getItem('adminPassword') || 'manojadmin123';
+        }
         
         // Check if already authenticated
         window.addEventListener('DOMContentLoaded', function() {
@@ -370,7 +401,7 @@
             const password = document.getElementById('adminPassword').value;
             const errorDiv = document.getElementById('passwordError');
             
-            if (password === ADMIN_PASSWORD) {
+            if (password === getAdminPassword()) {
                 sessionStorage.setItem('adminAuthenticated', 'true');
                 showDashboard();
             } else {
@@ -396,6 +427,75 @@
                 document.getElementById('passwordError').style.display = 'none';
                 showPasswordPrompt();
             }
+        }
+
+        // Change Password Functions
+        function openChangePasswordModal() {
+            document.getElementById('changePasswordModal').style.display = 'flex';
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+            document.getElementById('changePasswordError').style.display = 'none';
+            document.getElementById('changePasswordSuccess').style.display = 'none';
+        }
+
+        function closeChangePasswordModal() {
+            document.getElementById('changePasswordModal').style.display = 'none';
+        }
+
+        function changePassword() {
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const errorDiv = document.getElementById('changePasswordError');
+            const successDiv = document.getElementById('changePasswordSuccess');
+            
+            // Hide previous messages
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            
+            // Validation
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                errorDiv.textContent = '❌ All fields are required';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            if (currentPassword !== getAdminPassword()) {
+                errorDiv.textContent = '❌ Current password is incorrect';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            if (newPassword.length < 8) {
+                errorDiv.textContent = '❌ New password must be at least 8 characters';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                errorDiv.textContent = '❌ New passwords do not match';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            if (newPassword === currentPassword) {
+                errorDiv.textContent = '❌ New password must be different from current password';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            // Save new password
+            localStorage.setItem('adminPassword', newPassword);
+            
+            // Show success message
+            successDiv.textContent = '✅ Password changed successfully!';
+            successDiv.style.display = 'block';
+            
+            // Clear form and close after 2 seconds
+            setTimeout(() => {
+                closeChangePasswordModal();
+            }, 2000);
         }
 
         let allUsers = [];
