@@ -552,6 +552,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const subStatus = document.getElementById('subStatus');
         const subExpiry = document.getElementById('subExpiry');
         const subscribeBtn = document.getElementById('subscribeBtn');
+        const noSubscriptionMessage = document.getElementById('noSubscriptionMessage');
+        const courseContent = document.getElementById('courseContent');
+        
+        // Check if user has active subscription
+        let hasActiveSubscription = false;
         
         if (!user.subscription || !user.subscription.expiryDate) {
             // No subscription
@@ -584,7 +589,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     subscribeBtn.textContent = 'Renew Now';
                 }
             } else if (daysRemaining <= 7) {
-                // Expiring soon
+                // Expiring soon but still active
+                hasActiveSubscription = true;
                 if (subStatus) {
                     subStatus.textContent = `${user.subscription.plan} - Expiring Soon`;
                     subStatus.className = 'subscription-status expiring-soon';
@@ -597,6 +603,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } else {
                 // Active
+                hasActiveSubscription = true;
                 if (subStatus) {
                     subStatus.textContent = `${user.subscription.plan} - Active`;
                     subStatus.className = 'subscription-status active';
@@ -607,6 +614,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (subscribeBtn) {
                     subscribeBtn.textContent = 'Manage Subscription';
                 }
+            }
+        }
+        
+        // Show/hide course content based on subscription status
+        if (noSubscriptionMessage && courseContent) {
+            if (hasActiveSubscription) {
+                noSubscriptionMessage.style.display = 'none';
+                courseContent.style.display = 'block';
+            } else {
+                noSubscriptionMessage.style.display = 'block';
+                courseContent.style.display = 'none';
             }
         }
     }

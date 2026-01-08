@@ -93,60 +93,70 @@
             </div>
 
             <!-- Video Courses Section -->
-            <div class="video-courses">
-                <h3>Your Course Materials</h3>
-                
-                <!-- Course Materials -->
-                <div class="course-module">
-                    <div class="module-header">
-                        <h4>📚 Study Resources & Materials</h4>
-                        <div class="module-progress">
-                            <span>Available Resources: 2</span>
-                        </div>
-                    </div>
-                    <div class="video-grid">
-                        <!-- PDF Resource Card - Linux -->
-                        <div class="video-card resource-card">
-                            <div class="video-thumbnail pdf-thumbnail">
-                                <div class="resource-icon">📄</div>
-                                <div class="resource-type">PDF</div>
-                            </div>
-                            <div class="video-info">
-                                <h5>Linux Guide & Commands</h5>
-                                <p>Complete Linux reference guide and command cheatsheet</p>
-                                <div class="video-meta">
-                                    <span>📚 Study Material</span>
-                                    <span class="not-started">○ Download Available</span>
-                                </div>
-                                <div style="display: flex; gap: 10px;">
-                                    <button class="btn btn-small btn-view-pdf" data-pdf-url="https://manojdevopsvideos.s3.amazonaws.com/linux.pdf" style="flex: 1;">
-                                        View PDF
-                                    </button>
-                                    <a href="https://manojdevopsvideos.s3.amazonaws.com/linux.pdf" target="_blank" class="btn btn-small btn-secondary" style="flex: 1; text-align: center; text-decoration: none;">
-                                        Open Direct
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+            <div class="video-courses" id="courseMaterialsSection">
+                <!-- Course materials will be dynamically loaded based on subscription -->
+                <div id="noSubscriptionMessage" style="text-align: center; padding: 60px 20px; display: none;">
+                    <div style="font-size: 80px; margin-bottom: 20px;">🔒</div>
+                    <h3>No Active Subscription</h3>
+                    <p style="margin: 20px 0; color: var(--text-light);">Subscribe to access exclusive course materials and video content</p>
+                    <a href="subscription.html" class="btn btn-primary">View Subscription Plans</a>
+                </div>
 
-                        <!-- Add Your Video from S3 -->
-                        <div class="video-card">
-                            <div class="video-thumbnail">
-                                <div class="play-button">▶</div>
-                                <div class="resource-icon" style="font-size: 60px; padding: 40px;">🎥</div>
+                <div id="courseContent" style="display: none;">
+                    <h3>Your Enrolled Courses</h3>
+                    
+                    <!-- Course Materials -->
+                    <div class="course-module">
+                        <div class="module-header">
+                            <h4>📚 Study Resources & Materials</h4>
+                            <div class="module-progress">
+                                <span>Available Resources: 2</span>
                             </div>
-                            <div class="video-info">
-                                <h5>Your Course Video</h5>
-                                <p>Upload your MP4 video to S3 bucket and update URL below</p>
-                                <div class="video-meta">
-                                    <span>⏱️ Duration varies</span>
-                                    <span class="not-started">○ Ready to watch</span>
+                        </div>
+                        <div class="video-grid">
+                            <!-- PDF Resource Card - Linux -->
+                            <div class="video-card resource-card">
+                                <div class="video-thumbnail pdf-thumbnail">
+                                    <div class="resource-icon">📄</div>
+                                    <div class="resource-type">PDF</div>
                                 </div>
-                                <button class="btn btn-small btn-video" 
-                                        data-video-url="https://manojdevopsvideos.s3.amazonaws.com/your-video.mp4" 
-                                        data-video-type="mp4">
-                                    Watch Video
-                                </button>
+                                <div class="video-info">
+                                    <h5>Linux Guide & Commands</h5>
+                                    <p>Complete Linux reference guide and command cheatsheet</p>
+                                    <div class="video-meta">
+                                        <span>📚 Study Material</span>
+                                        <span class="not-started">○ Download Available</span>
+                                    </div>
+                                    <div style="display: flex; gap: 10px;">
+                                        <button class="btn btn-small btn-view-pdf" data-pdf-url="https://manojdevopsvideos.s3.amazonaws.com/linux.pdf" style="flex: 1;">
+                                            View PDF
+                                        </button>
+                                        <a href="https://manojdevopsvideos.s3.amazonaws.com/linux.pdf" target="_blank" class="btn btn-small btn-secondary" style="flex: 1; text-align: center; text-decoration: none;">
+                                            Open Direct
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Add Your Video from S3 -->
+                            <div class="video-card">
+                                <div class="video-thumbnail">
+                                    <div class="play-button">▶</div>
+                                    <div class="resource-icon" style="font-size: 60px; padding: 40px;">🎥</div>
+                                </div>
+                                <div class="video-info">
+                                    <h5>Your Course Video</h5>
+                                    <p>Upload your MP4 video to S3 bucket and update URL below</p>
+                                    <div class="video-meta">
+                                        <span>⏱️ Duration varies</span>
+                                        <span class="not-started">○ Ready to watch</span>
+                                    </div>
+                                    <button class="btn btn-small btn-video" 
+                                            data-video-url="https://manojdevopsvideos.s3.amazonaws.com/your-video.mp4" 
+                                            data-video-type="mp4">
+                                        Watch Video
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
