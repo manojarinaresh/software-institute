@@ -260,7 +260,19 @@
         </div>
     </nav>
 
-    <div class="admin-container">
+    <!-- Password Protection Modal -->
+    <div id="passwordModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 40px; border-radius: 15px; max-width: 400px; width: 90%; text-align: center;">
+            <h2 style="margin: 0 0 10px 0; color: #2d3748;">🔐 Admin Access</h2>
+            <p style="color: #718096; margin-bottom: 30px;">Enter admin password to continue</p>
+            <input type="password" id="adminPassword" placeholder="Enter password" style="width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1em; margin-bottom: 20px;">
+            <div id="passwordError" style="color: #e53e3e; margin-bottom: 15px; display: none;">❌ Incorrect password</div>
+            <button onclick="checkPassword()" style="width: 100%; padding: 15px; background: #667eea; color: white; border: none; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer;">Access Dashboard</button>
+            <button onclick="window.location.href='index.html'" style="width: 100%; padding: 15px; background: transparent; color: #718096; border: none; border-radius: 8px; font-size: 0.9em; cursor: pointer; margin-top: 10px;">← Back to Home</button>
+        </div>
+    </div>
+
+    <div class="admin-container" id="adminContent" style="display: none;">
         <!-- Header -->
         <div class="admin-header">
             <h1>📊 Admin Dashboard</h1>
@@ -328,15 +340,56 @@
     <script src="js/supabase-config.js"></script>
     <script src="js/supabase-db.js"></script>
     <script>
+        // Password protection
+        const ADMIN_PASSWORD = 'manojadmin123'; // Change this to your secure password
+        
+        // Check if already authenticated
+        window.addEventListener('DOMContentLoaded', function() {
+            const isAuthenticated = sessionStorage.getItem('adminAuthenticated');
+            if (isAuthenticated === 'true') {
+                showDashboard();
+            } else {
+                showPasswordPrompt();
+            }
+        });
+
+        function showPasswordPrompt() {
+            document.getElementById('passwordModal').style.display = 'flex';
+            document.getElementById('adminContent').style.display = 'none';
+            
+            // Allow Enter key to submit
+            document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+        }
+
+        function checkPassword() {
+            const password = document.getElementById('adminPassword').value;
+            const errorDiv = document.getElementById('passwordError');
+            
+            if (password === ADMIN_PASSWORD) {
+                sessionStorage.setItem('adminAuthenticated', 'true');
+                showDashboard();
+            } else {
+                errorDiv.style.display = 'block';
+                document.getElementById('adminPassword').value = '';
+                document.getElementById('adminPassword').focus();
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('passwordModal').style.display = 'none';
+            document.getElementById('adminContent').style.display = 'block';
+            loadAllData();
+        }
+
         let allUsers = [];
         let allSubscriptions = [];
         let allLogins = [];
 
         // Load all data on page load
-        window.addEventListener('DOMContentLoaded', function() {
-            loadAllData();
-        });
-
         async function loadAllData() {
             if (!window.supabaseClient || !isSupabaseEnabled()) {
                 showError('usersTableContainer', '⚠️ Supabase not configured. Please check your connection.');
