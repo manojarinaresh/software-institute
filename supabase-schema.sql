@@ -105,7 +105,18 @@ ALTER TABLE subscriptions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE login_history ENABLE ROW LEVEL SECURITY;
 ALTER TABLE email_notifications ENABLE ROW LEVEL SECURITY;
 
--- 8. Create policies for public access (needed for your website)
+-- 8. Drop existing policies if they exist
+DROP POLICY IF EXISTS "Enable insert for registration" ON users;
+DROP POLICY IF EXISTS "Enable read access for all users" ON users;
+DROP POLICY IF EXISTS "Users can update own data" ON users;
+DROP POLICY IF EXISTS "Enable insert for subscriptions" ON subscriptions;
+DROP POLICY IF EXISTS "Enable read for subscriptions" ON subscriptions;
+DROP POLICY IF EXISTS "Enable update for subscriptions" ON subscriptions;
+DROP POLICY IF EXISTS "Enable insert for login history" ON login_history;
+DROP POLICY IF EXISTS "Enable read for login history" ON login_history;
+DROP POLICY IF EXISTS "Enable all for email notifications" ON email_notifications;
+
+-- 9. Create policies for public access (needed for your website)
 -- Allow anyone to insert new users (registration)
 CREATE POLICY "Enable insert for registration" ON users
     FOR INSERT WITH CHECK (true);
@@ -142,7 +153,7 @@ CREATE POLICY "Enable read for login history" ON login_history
 CREATE POLICY "Enable all for email notifications" ON email_notifications
     FOR ALL USING (true);
 
--- 9. Create admin stats view
+-- 10. Create admin stats view
 CREATE OR REPLACE VIEW admin_statistics AS
 SELECT 
     (SELECT COUNT(*) FROM users) as total_users,
