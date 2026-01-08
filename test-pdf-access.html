@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test PDF Access - S3 Bucket</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #FF6B35; }
+        h2 { color: #333; margin-top: 0; }
+        .status { 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; border: 2px solid #28a745; }
+        .error { background: #f8d7da; color: #721c24; border: 2px solid #dc3545; }
+        .info { background: #d1ecf1; color: #0c5460; border: 2px solid #17a2b8; }
+        button, .btn {
+            background: #FF6B35;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        button:hover, .btn:hover { background: #F7931E; }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code { color: #e83e8c; }
+        .url-input {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 S3 PDF Access Tester</h1>
+    <p>Test your PDF file from bucket: <strong>manojdevopsvideos</strong></p>
+
+    <!-- Test 1: Direct Link -->
+    <div class="test-box">
+        <h2>Test 1: Direct Browser Access</h2>
+        <p>Click to open PDF in new tab:</p>
+        <a href="https://manojdevopsvideos.s3.amazonaws.com/linux.pdf" target="_blank" class="btn">
+            Open: linux.pdf
+        </a>
+        <div class="info status">
+            ✓ If PDF opens → File is public and accessible<br>
+            ✗ If "Access Denied" → Check bucket policy or file permissions
+        </div>
+    </div>
+
+    <!-- Test 2: Fetch API -->
+    <div class="test-box">
+        <h2>Test 2: Check File Accessibility</h2>
+        <button onclick="testFetch()">Run Fetch Test</button>
+        <div id="fetchResult" class="status info" style="display:none;"></div>
+    </div>
+
+    <!-- Test 3: Iframe Embed -->
+    <div class="test-box">
+        <h2>Test 3: Iframe Embed (Direct)</h2>
+        <button onclick="loadDirectIframe()">Load PDF in Iframe</button>
+        <div id="iframeContainer" style="margin-top: 15px;"></div>
+    </div>
+
+    <!-- Test 4: Google Docs Viewer -->
+    <div class="test-box">
+        <h2>Test 4: Google Docs Viewer</h2>
+        <button onclick="loadGoogleViewer()">Load PDF with Google Viewer</button>
+        <div class="info status">
+            Google Docs Viewer can display PDFs even without CORS configured
+        </div>
+        <div id="googleContainer" style="margin-top: 15px;"></div>
+    </div>
+
+    <!-- Test 5: Alternative URLs -->
+    <div class="test-box">
+        <h2>Test 5: Try Different URL Formats</h2>
+        <p>Your PDF might be accessible at one of these URLs:</p>
+        <a href="https://manojdevopsvideos.s3.amazonaws.com/linux.pdf" target="_blank" class="btn">
+            Format 1: Default
+        </a>
+        <a href="https://manojdevopsvideos.s3.us-east-1.amazonaws.com/linux.pdf" target="_blank" class="btn">
+            Format 2: us-east-1
+        </a>
+        <a href="https://manojdevopsvideos.s3.us-west-2.amazonaws.com/linux.pdf" target="_blank" class="btn">
+            Format 3: us-west-2
+        </a>
+        <a href="https://s3.amazonaws.com/manojdevopsvideos/linux.pdf" target="_blank" class="btn">
+            Format 4: Path-style
+        </a>
+    </div>
+
+    <!-- Test 6: Custom URL -->
+    <div class="test-box">
+        <h2>Test 6: Test Your Own URL</h2>
+        <input type="text" class="url-input" id="customUrl" 
+               placeholder="https://manojdevopsvideos.s3.amazonaws.com/your-file.pdf"
+               value="https://manojdevopsvideos.s3.amazonaws.com/linux.pdf">
+        <button onclick="testCustomUrl()">Test This URL</button>
+        <div id="customResult" class="status info" style="display:none;"></div>
+    </div>
+
+    <!-- Diagnostic Info -->
+    <div class="test-box">
+        <h2>🔍 Diagnostic Commands</h2>
+        <p>Run these in your terminal to check S3 setup:</p>
+        
+        <h3>Check if file exists:</h3>
+        <pre>aws s3 ls s3://manojdevopsvideos/ --recursive | grep linux.pdf</pre>
+
+        <h3>Get bucket region:</h3>
+        <pre>aws s3api get-bucket-location --bucket manojdevopsvideos</pre>
+
+        <h3>Test file access:</h3>
+        <pre>curl -I https://manojdevopsvideos.s3.amazonaws.com/linux.pdf</pre>
+
+        <h3>Make file public:</h3>
+        <pre>aws s3api put-object-acl --bucket manojdevopsvideos --key linux.pdf --acl public-read</pre>
+
+        <h3>Add CORS to bucket:</h3>
+        <pre>aws s3api put-bucket-cors --bucket manojdevopsvideos --cors-configuration '{
+  "CORSRules": [{
+    "AllowedHeaders": ["*"],
+    "AllowedMethods": ["GET", "HEAD"],
+    "AllowedOrigins": ["*"],
+    "ExposeHeaders": []
+  }]
+}'</pre>
+    </div>
+
+    <script>
+        async function testFetch() {
+            const url = 'https://manojdevopsvideos.s3.amazonaws.com/linux.pdf';
+            const result = document.getElementById('fetchResult');
+            result.style.display = 'block';
+            result.textContent = 'Testing...';
+            result.className = 'status info';
+
+            try {
+                const response = await fetch(url, { method: 'HEAD' });
+                if (response.ok) {
+                    result.className = 'status success';
+                    result.innerHTML = `✓ SUCCESS!<br><br>
+                        Status: ${response.status} ${response.statusText}<br>
+                        Content-Type: ${response.headers.get('content-type')}<br>
+                        Content-Length: ${response.headers.get('content-length')} bytes<br><br>
+                        Your PDF is publicly accessible!`;
+                } else {
+                    result.className = 'status error';
+                    result.innerHTML = `✗ FAILED<br><br>
+                        Status: ${response.status} ${response.statusText}<br><br>
+                        File exists but not publicly accessible.<br>
+                        Run: aws s3api put-object-acl --bucket manojdevopsvideos --key linux.pdf --acl public-read`;
+                }
+            } catch (error) {
+                result.className = 'status error';
+                result.innerHTML = `✗ ERROR<br><br>
+                    ${error.message}<br><br>
+                    Possible issues:<br>
+                    1. CORS not configured (expected for HEAD request)<br>
+                    2. File doesn't exist at this URL<br>
+                    3. Network issue<br><br>
+                    Try "Test 1" to open in browser directly.`;
+            }
+        }
+
+        function loadDirectIframe() {
+            const container = document.getElementById('iframeContainer');
+            container.innerHTML = '<iframe src="https://manojdevopsvideos.s3.amazonaws.com/linux.pdf"></iframe>';
+        }
+
+        function loadGoogleViewer() {
+            const url = 'https://manojdevopsvideos.s3.amazonaws.com/linux.pdf';
+            const container = document.getElementById('googleContainer');
+            container.innerHTML = `<iframe src="https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true"></iframe>`;
+        }
+
+        async function testCustomUrl() {
+            const url = document.getElementById('customUrl').value;
+            const result = document.getElementById('customResult');
+            result.style.display = 'block';
+            result.textContent = 'Testing: ' + url;
+            result.className = 'status info';
+
+            try {
+                const response = await fetch(url, { method: 'HEAD' });
+                if (response.ok) {
+                    result.className = 'status success';
+                    result.innerHTML = `✓ This URL works!<br><br>Use this in your learning portal:<br><code>${url}</code>`;
+                    
+                    // Show iframe
+                    result.innerHTML += '<br><br><iframe src="' + url + '" style="width:100%; height:400px;"></iframe>';
+                } else {
+                    result.className = 'status error';
+                    result.innerHTML = `✗ This URL returned: ${response.status}<br><br>Try another URL format above.`;
+                }
+            } catch (error) {
+                result.className = 'status info';
+                result.innerHTML = `Cannot test with fetch (CORS), but trying to load anyway...<br><br>`;
+                result.innerHTML += '<iframe src="' + url + '" style="width:100%; height:400px;"></iframe>';
+            }
+        }
+    </script>
+</body>
+</html>

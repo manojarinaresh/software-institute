@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Plans - Manoj Technologies</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1>Manoj Technologies</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="#" id="logoutBtn" class="btn-logout">Logout</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Subscription Header -->
+    <section class="portal-header">
+        <div class="container">
+            <h2>Choose Your Learning Plan 🚀</h2>
+            <p>Unlock unlimited access to all video courses and learning materials</p>
+        </div>
+    </section>
+
+    <!-- Subscription Plans -->
+    <section class="subscription-section">
+        <div class="container">
+            <div class="subscription-plans">
+                <!-- Monthly Plan -->
+                <div class="plan-card">
+                    <div class="plan-badge">Popular</div>
+                    <h3>Monthly Plan</h3>
+                    <div class="plan-price">
+                        <span class="currency">$</span>
+                        <span class="amount">29</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <ul class="plan-features">
+                        <li>✓ Access to all video courses</li>
+                        <li>✓ Download course materials</li>
+                        <li>✓ Certificate of completion</li>
+                        <li>✓ 24/7 student support</li>
+                        <li>✓ Progress tracking</li>
+                        <li>✓ Monthly webinars</li>
+                    </ul>
+                    <button class="btn btn-primary btn-subscribe" data-plan="monthly" data-duration="30" data-price="29">
+                        Subscribe Now
+                    </button>
+                </div>
+
+                <!-- Quarterly Plan -->
+                <div class="plan-card featured">
+                    <div class="plan-badge recommended">Best Value</div>
+                    <h3>Quarterly Plan</h3>
+                    <div class="plan-price">
+                        <span class="currency">$</span>
+                        <span class="amount">69</span>
+                        <span class="period">/3 months</span>
+                    </div>
+                    <div class="plan-savings">Save $18!</div>
+                    <ul class="plan-features">
+                        <li>✓ All Monthly Plan features</li>
+                        <li>✓ Priority support</li>
+                        <li>✓ Exclusive project templates</li>
+                        <li>✓ Career guidance sessions</li>
+                        <li>✓ Resume review</li>
+                        <li>✓ Interview preparation</li>
+                    </ul>
+                    <button class="btn btn-primary btn-subscribe" data-plan="quarterly" data-duration="90" data-price="69">
+                        Subscribe Now
+                    </button>
+                </div>
+
+                <!-- Annual Plan -->
+                <div class="plan-card">
+                    <div class="plan-badge">Best Deal</div>
+                    <h3>Annual Plan</h3>
+                    <div class="plan-price">
+                        <span class="currency">$</span>
+                        <span class="amount">199</span>
+                        <span class="period">/year</span>
+                    </div>
+                    <div class="plan-savings">Save $149!</div>
+                    <ul class="plan-features">
+                        <li>✓ All Quarterly Plan features</li>
+                        <li>✓ 1-on-1 mentorship sessions</li>
+                        <li>✓ Job placement assistance</li>
+                        <li>✓ Lifetime course updates</li>
+                        <li>✓ Exclusive community access</li>
+                        <li>✓ Bonus courses included</li>
+                    </ul>
+                    <button class="btn btn-primary btn-subscribe" data-plan="annual" data-duration="365" data-price="199">
+                        Subscribe Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- Current Subscription Status -->
+            <div id="currentSubscriptionBox" class="current-subscription" style="display: none;">
+                <h3>Your Current Subscription</h3>
+                <div class="subscription-info">
+                    <div class="sub-detail">
+                        <strong>Plan:</strong> <span id="currentPlan">-</span>
+                    </div>
+                    <div class="sub-detail">
+                        <strong>Status:</strong> <span id="currentStatus" class="status-active">Active</span>
+                    </div>
+                    <div class="sub-detail">
+                        <strong>Expires:</strong> <span id="currentExpiry">-</span>
+                    </div>
+                    <div class="sub-detail">
+                        <strong>Days Remaining:</strong> <span id="daysRemaining">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="video-modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close-modal">&times;</span>
+            <div style="padding: 40px;">
+                <h2 style="color: var(--primary-color); margin-bottom: 20px;">Complete Your Payment</h2>
+                
+                <div class="payment-summary">
+                    <h3>Payment Summary</h3>
+                    <div class="summary-row">
+                        <span>Plan:</span>
+                        <span id="paymentPlan">Monthly Plan</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Duration:</span>
+                        <span id="paymentDuration">30 days</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total Amount:</span>
+                        <span id="paymentAmount">$29.00</span>
+                    </div>
+                </div>
+
+                <form id="paymentForm" class="login-form">
+                    <div class="form-group">
+                        <label for="cardName">Cardholder Name</label>
+                        <input type="text" id="cardName" required placeholder="John Doe">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cardNumber">Card Number</label>
+                        <input type="text" id="cardNumber" required placeholder="1234 5678 9012 3456" maxlength="19">
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label for="cardExpiry">Expiry Date</label>
+                            <input type="text" id="cardExpiry" required placeholder="MM/YY" maxlength="5">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cardCVV">CVV</label>
+                            <input type="text" id="cardCVV" required placeholder="123" maxlength="3">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-full" style="margin-top: 20px;">
+                        Complete Payment
+                    </button>
+                    
+                    <p style="text-align: center; margin-top: 15px; font-size: 0.85rem; color: var(--text-light);">
+                        🔒 Your payment information is secure and encrypted
+                    </p>
+                </form>
+
+                <!-- Demo Mode Notice -->
+                <div class="demo-credentials" style="margin-top: 20px;">
+                    <h4>Demo Mode</h4>
+                    <p>This is a demonstration. No real payment will be processed.</p>
+                    <p>Click "Complete Payment" to activate your subscription.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Manoj Technologies</h3>
+                    <p>Empowering careers through quality software training</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="courses.html">Courses</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Email: info@skyedge.com</p>
+                    <p>Phone: (123) 456-7890</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Manoj Technologies. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

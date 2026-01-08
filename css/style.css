@@ -898,3 +898,833 @@ body {
         font-size: 1.5rem;
     }
 }
+
+/* ===== Login Page Styles ===== */
+.login-section {
+    min-height: calc(100vh - 80px);
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.05) 0%, rgba(0, 217, 255, 0.05) 100%);
+    padding: 60px 0;
+    display: flex;
+    align-items: center;
+}
+
+.login-container {
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--bg-white);
+    border-radius: 15px;
+    box-shadow: var(--shadow-lg);
+    padding: 40px;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-header h2 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.login-header p {
+    color: var(--text-light);
+}
+
+.login-form .form-group {
+    margin-bottom: 20px;
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+.login-form input[type="email"],
+.login-form input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.forgot-password {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+.forgot-password:hover {
+    color: var(--secondary-color);
+}
+
+.btn-full {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+}
+
+.form-message {
+    margin-top: 20px;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    display: none;
+}
+
+.form-message.error {
+    background-color: #fee;
+    color: #c33;
+    border: 1px solid #fcc;
+    display: block;
+}
+
+.form-message.success {
+    background-color: #efe;
+    color: #3c3;
+    border: 1px solid #cfc;
+    display: block;
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 25px;
+    border-top: 1px solid var(--border-color);
+}
+
+.login-footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-footer a:hover {
+    text-decoration: underline;
+}
+
+.demo-credentials {
+    margin-top: 25px;
+    padding: 15px;
+    background-color: var(--bg-light);
+    border-radius: 8px;
+    border-left: 4px solid var(--accent-color);
+}
+
+.demo-credentials h4 {
+    color: var(--text-dark);
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+.demo-credentials p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.btn-logout {
+    color: var(--primary-color) !important;
+    font-weight: 600 !important;
+}
+
+/* ===== Learning Portal Styles ===== */
+.portal-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    padding: 40px 0;
+    text-align: center;
+}
+
+.portal-header h2 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+/* Subscription Banner */
+.subscription-banner {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(0, 217, 255, 0.1) 100%);
+    border-bottom: 3px solid var(--primary-color);
+    padding: 15px 0;
+    margin-bottom: 30px;
+}
+
+.banner-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.banner-info {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.subscription-status {
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: var(--success-color);
+    color: white;
+    font-size: 0.9rem;
+}
+
+.subscription-status.expired {
+    background: #e74c3c;
+}
+
+.subscription-status.expiring-soon {
+    background: var(--secondary-color);
+}
+
+.subscription-status.free {
+    background: var(--text-light);
+}
+
+.subscription-expiry {
+    color: var(--text-dark);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.learning-dashboard {
+    padding: 60px 0;
+    background-color: var(--bg-light);
+}
+
+.progress-overview {
+    margin-bottom: 50px;
+}
+
+.progress-overview h3 {
+    color: var(--text-dark);
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+}
+
+.progress-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.progress-card {
+    background: var(--bg-white);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: transform 0.3s;
+}
+
+.progress-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.progress-icon {
+    font-size: 3rem;
+}
+
+.progress-info h4 {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.progress-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.video-courses {
+    margin-top: 40px;
+}
+
+.video-courses > h3 {
+    color: var(--text-dark);
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+}
+
+.course-module {
+    background: var(--bg-white);
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 40px;
+    box-shadow: var(--shadow);
+}
+
+.module-header {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.module-header h4 {
+    color: var(--text-dark);
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.module-progress {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.module-progress span {
+    color: var(--text-light);
+    font-weight: 500;
+    min-width: 100px;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 10px;
+    background-color: var(--border-color);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border-radius: 10px;
+    transition: width 0.3s;
+}
+
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.video-card {
+    background: var(--bg-white);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.video-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-color);
+}
+
+.video-thumbnail {
+    position: relative;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    overflow: hidden;
+    background-color: #000;
+}
+
+.video-thumbnail img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 107, 53, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    z-index: 1;
+}
+
+.video-thumbnail:hover .play-button {
+    background: var(--primary-color);
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.video-info {
+    padding: 20px;
+}
+
+.video-info h5 {
+    color: var(--text-dark);
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.video-info p {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.video-meta {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    font-size: 0.85rem;
+}
+
+.video-meta .completed {
+    color: var(--success-color);
+    font-weight: 600;
+}
+
+.video-meta .in-progress {
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+.video-meta .not-started {
+    color: var(--text-light);
+    font-weight: 600;
+}
+
+.btn-video {
+    width: 100%;
+}
+
+/* Video Modal */
+.video-modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    animation: fadeIn 0.3s;
+}
+
+.video-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: var(--bg-white);
+    margin: auto;
+    padding: 0;
+    width: 90%;
+    max-width: 1200px;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+}
+
+.close-modal {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10001;
+    transition: color 0.3s;
+}
+
+.close-modal:hover {
+    color: var(--primary-color);
+}
+
+.video-container {
+    position: relative;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    background-color: #000;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.video-controls {
+    padding: 20px;
+    text-align: center;
+    background-color: var(--bg-light);
+}
+
+/* PDF and Resource Cards */
+.resource-card .pdf-thumbnail {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+}
+
+.resource-icon {
+    font-size: 4rem;
+    margin-bottom: 10px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.resource-type {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    color: #667eea;
+}
+
+.btn-view-pdf {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+}
+
+.btn-view-pdf:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.pdf-container {
+    background-color: #525659;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Responsive Styles for Learning Portal */
+@media (max-width: 768px) {
+    .portal-header h2 {
+        font-size: 1.8rem;
+    }
+
+    .progress-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .video-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-content {
+        width: 95%;
+    }
+
+    .module-progress {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .module-progress span {
+        min-width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        padding: 30px 20px;
+    }
+
+    .login-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .portal-header {
+        padding: 30px 0;
+    }
+
+    .course-module {
+        padding: 20px 15px;
+    }
+}
+
+/* ===== Subscription Page Styles ===== */
+.subscription-section {
+    padding: 60px 0;
+    background-color: var(--bg-light);
+}
+
+.subscription-plans {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.plan-card {
+    background: var(--bg-white);
+    border-radius: 15px;
+    padding: 40px 30px;
+    box-shadow: var(--shadow);
+    position: relative;
+    transition: all 0.3s;
+    border: 3px solid transparent;
+}
+
+.plan-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-lg);
+}
+
+.plan-card.featured {
+    border-color: var(--primary-color);
+    transform: scale(1.05);
+}
+
+.plan-card.featured:hover {
+    transform: scale(1.08) translateY(-10px);
+}
+
+.plan-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--secondary-color);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.plan-badge.recommended {
+    background: var(--primary-color);
+}
+
+.plan-card h3 {
+    color: var(--text-dark);
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+.plan-price {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.plan-price .currency {
+    font-size: 1.5rem;
+    color: var(--text-light);
+    margin-top: 5px;
+}
+
+.plan-price .amount {
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    line-height: 1;
+}
+
+.plan-price .period {
+    font-size: 1rem;
+    color: var(--text-light);
+    align-self: flex-end;
+    margin-bottom: 10px;
+    margin-left: 5px;
+}
+
+.plan-savings {
+    color: var(--success-color);
+    font-weight: 600;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.plan-features {
+    list-style: none;
+    margin: 30px 0;
+    padding: 0;
+}
+
+.plan-features li {
+    padding: 12px 0;
+    color: var(--text-dark);
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.95rem;
+}
+
+.plan-features li:last-child {
+    border-bottom: none;
+}
+
+.btn-subscribe {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+}
+
+.current-subscription {
+    background: var(--bg-white);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: var(--shadow);
+    margin-bottom: 40px;
+}
+
+.current-subscription h3 {
+    color: var(--text-dark);
+    margin-bottom: 20px;
+}
+
+.subscription-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.sub-detail {
+    padding: 15px;
+    background: var(--bg-light);
+    border-radius: 8px;
+}
+
+.sub-detail strong {
+    color: var(--text-light);
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.sub-detail span {
+    color: var(--text-dark);
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.status-active {
+    color: var(--success-color) !important;
+}
+
+.status-expired {
+    color: #e74c3c !important;
+}
+
+.guarantee-box {
+    text-align: center;
+    padding: 30px;
+    background: linear-gradient(135deg, rgba(6, 255, 165, 0.1) 0%, rgba(0, 217, 255, 0.1) 100%);
+    border-radius: 15px;
+    border: 2px solid var(--success-color);
+}
+
+.guarantee-box h4 {
+    color: var(--text-dark);
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+.guarantee-box p {
+    color: var(--text-light);
+    font-size: 1rem;
+}
+
+.payment-summary {
+    background: var(--bg-light);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.payment-summary h3 {
+    color: var(--text-dark);
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.summary-row.total {
+    border-bottom: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-top: 10px;
+    padding-top: 15px;
+    border-top: 2px solid var(--primary-color);
+}
+
+/* Responsive for Subscription */
+@media (max-width: 768px) {
+    .subscription-plans {
+        grid-template-columns: 1fr;
+    }
+
+    .plan-card.featured {
+        transform: scale(1);
+    }
+
+    .banner-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .banner-info {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .subscription-info {
+        grid-template-columns: 1fr;
+    }
+}

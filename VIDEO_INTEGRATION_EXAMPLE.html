@@ -1,0 +1,207 @@
+<!-- EXAMPLE: How to Add Your Own Hosted Videos -->
+
+<!-- Method 1: AWS S3 / Self-Hosted MP4 -->
+<div class="video-card">
+    <div class="video-thumbnail">
+        <div class="play-button">▶</div>
+        <!-- Use your own thumbnail image -->
+        <img src="images/thumbnails/my-course-thumbnail.jpg" alt="My Custom Course">
+    </div>
+    <div class="video-info">
+        <h5>Your Custom Course Title</h5>
+        <p>Description of your uploaded video course</p>
+        <div class="video-meta">
+            <span>⏱️ 90 min</span>
+            <span class="not-started">○ Not Started</span>
+        </div>
+        <!-- Replace with your S3 URL -->
+        <button class="btn btn-small btn-video" 
+                data-video-url="https://manojdevopsvideos.s3.amazonaws.com/videos/my-course.mp4" 
+                data-video-type="mp4">
+            Watch Video
+        </button>
+    </div>
+</div>
+
+<!-- Method 2: Vimeo Hosted Video -->
+<div class="video-card">
+    <div class="video-thumbnail">
+        <div class="play-button">▶</div>
+        <!-- Vimeo thumbnail -->
+        <img src="https://i.vimeocdn.com/video/YOUR_VIDEO_ID_l.jpg" alt="Vimeo Course">
+    </div>
+    <div class="video-info">
+        <h5>Your Vimeo Course</h5>
+        <p>Professional video hosted on Vimeo</p>
+        <div class="video-meta">
+            <span>⏱️ 120 min</span>
+            <span class="not-started">○ Not Started</span>
+        </div>
+        <!-- Replace with your Vimeo video ID -->
+        <button class="btn btn-small btn-video" 
+                data-video="123456789" 
+                data-video-type="vimeo">
+            Watch Video
+        </button>
+    </div>
+</div>
+
+<!-- Method 3: Mixed - YouTube + Your Videos -->
+<div class="video-grid">
+    <!-- YouTube Video (Free) -->
+    <div class="video-card">
+        <div class="video-thumbnail">
+            <div class="play-button">▶</div>
+            <img src="https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg" alt="YouTube Tutorial">
+        </div>
+        <div class="video-info">
+            <h5>Free Introduction</h5>
+            <p>YouTube hosted preview video</p>
+            <div class="video-meta">
+                <span>⏱️ 15 min</span>
+                <span class="completed">✓ Completed</span>
+            </div>
+            <button class="btn btn-small btn-video" 
+                    data-video="VIDEO_ID" 
+                    data-video-type="youtube">
+                Watch Video
+            </button>
+        </div>
+    </div>
+
+    <!-- Your Premium Content (S3/Vimeo) -->
+    <div class="video-card">
+        <div class="video-thumbnail">
+            <div class="play-button">▶</div>
+            <div class="premium-badge">🔒 Premium</div>
+            <img src="images/thumbnails/premium-course.jpg" alt="Premium Course">
+        </div>
+        <div class="video-info">
+            <h5>Advanced Training (Premium)</h5>
+            <p>Exclusive content for subscribers</p>
+            <div class="video-meta">
+                <span>⏱️ 180 min</span>
+                <span class="not-started">○ Not Started</span>
+            </div>
+            <button class="btn btn-small btn-video" 
+                    data-video-url="https://your-cdn.com/premium/advanced.mp4" 
+                    data-video-type="mp4">
+                Watch Video
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 
+=================================================================
+STEP-BY-STEP GUIDE TO UPLOAD YOUR 50GB VIDEOS
+=================================================================
+
+OPTION A: AWS S3 (Recommended)
+------------------------------
+1. Sign up at: aws.amazon.com
+2. Create S3 bucket: "skyedge-videos"
+3. Upload videos via AWS Console or CLI:
+   
+   aws s3 cp /path/to/video.mp4 s3://skyedge-videos/course-name/video.mp4
+
+4. Make videos public or use signed URLs
+5. Get URL: https://skyedge-videos.s3.amazonaws.com/course-name/video.mp4
+6. Add to learning.html with data-video-url attribute
+
+
+OPTION B: Vimeo Business
+-------------------------
+1. Sign up at: vimeo.com/upgrade (Business plan: $50/month)
+2. Upload videos via web interface
+3. Get video ID from URL: vimeo.com/123456789
+4. Add to learning.html with data-video="123456789" data-video-type="vimeo"
+
+
+OPTION C: Self-Hosting
+-----------------------
+1. Upload to your web server: /var/www/videos/
+2. Configure web server (Apache/Nginx) for video streaming
+3. Use URL: https://yourdomain.com/videos/course.mp4
+4. Add to learning.html with data-video-url attribute
+
+
+BULK UPLOAD WITH AWS CLI
+-------------------------
+# Install AWS CLI
+pip install awscli
+
+# Configure
+aws configure
+
+# Upload entire folder to YOUR bucket
+aws s3 sync /path/to/videos/ s3://manojdevopsvideos/courses/
+
+# Upload single file with public read access
+aws s3 cp video.mp4 s3://manojdevopsvideos/ --acl public-read
+
+# Upload specific course
+aws s3 cp my-course.mp4 s3://manojdevopsvideos/web-dev/course1.mp4 --acl public-read
+
+
+VIDEO OPTIMIZATION TIPS
+------------------------
+Before uploading 50GB:
+
+1. Compress with HandBrake (handbrake.fr)
+   - Preset: Web/General
+   - Format: MP4
+   - Codec: H.264
+   - Quality: RF 20-23
+   Result: 50GB → 15-25GB
+
+2. Resolution:
+   - 1080p for main content
+   - 720p for acceptable quality + smaller size
+   - 480p for mobile-friendly
+
+3. Bitrate:
+   - 1080p: 4-5 Mbps
+   - 720p: 2-3 Mbps
+   - 480p: 1-1.5 Mbps
+
+
+COST CALCULATOR (50GB)
+----------------------
+AWS S3:
+  Storage: $1.15/month
+  Transfer: $4.50 per 50GB downloaded
+  Total: ~$10/month for 100 views
+
+Vimeo Business:
+  $50/month flat (unlimited storage/bandwidth)
+
+Cloudflare Stream:
+  $24/month storage + $1 per 1000 min viewed
+
+
+SECURITY FOR PAID COURSES
+--------------------------
+1. AWS Signed URLs (time-limited access)
+2. Check subscription before serving video
+3. Domain restriction
+4. DRM encryption (for highly sensitive content)
+
+-->
+
+<!-- CSS for Premium Badge (add to style.css) -->
+<style>
+.premium-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+</style>

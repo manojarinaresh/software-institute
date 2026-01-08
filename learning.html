@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Portal - Manoj Technologies</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1>Manoj Technologies</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="#" id="logoutBtn" class="btn-logout">Logout</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Learning Portal Header -->
+    <section class="portal-header">
+        <div class="container">
+            <h2>Welcome, <span id="studentName">Student</span>! 🎓</h2>
+            <p>Continue your learning journey with our comprehensive video courses</p>
+        </div>
+    </section>
+
+    <!-- Subscription Status Banner -->
+    <div id="subscriptionBanner" class="subscription-banner">
+        <div class="container">
+            <div class="banner-content">
+                <div class="banner-info">
+                    <span class="subscription-status" id="subStatus">No Subscription</span>
+                    <span class="subscription-expiry" id="subExpiry">Subscribe to access all courses</span>
+                </div>
+                <a href="subscription.html" class="btn btn-secondary btn-small" id="subscribeBtn">Upgrade Now</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Learning Dashboard -->
+    <section class="learning-dashboard">
+        <div class="container">
+            <!-- Course Progress Overview -->
+            <div class="progress-overview">
+                <h3>Your Progress</h3>
+                <div class="progress-cards">
+                    <div class="progress-card">
+                        <div class="progress-icon">📚</div>
+                        <div class="progress-info">
+                            <h4>Courses Enrolled</h4>
+                            <p class="progress-number">3</p>
+                        </div>
+                    </div>
+                    <div class="progress-card">
+                        <div class="progress-icon">✅</div>
+                        <div class="progress-info">
+                            <h4>Videos Completed</h4>
+                            <p class="progress-number">24</p>
+                        </div>
+                    </div>
+                    <div class="progress-card">
+                        <div class="progress-icon">⏱️</div>
+                        <div class="progress-info">
+                            <h4>Learning Hours</h4>
+                            <p class="progress-number">48</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Courses Section -->
+            <div class="video-courses">
+                <h3>Your Course Materials</h3>
+                
+                <!-- Course Materials -->
+                <div class="course-module">
+                    <div class="module-header">
+                        <h4>📚 Study Resources & Materials</h4>
+                        <div class="module-progress">
+                            <span>Available Resources: 2</span>
+                        </div>
+                    </div>
+                    <div class="video-grid">
+                        <!-- PDF Resource Card - Linux -->
+                        <div class="video-card resource-card">
+                            <div class="video-thumbnail pdf-thumbnail">
+                                <div class="resource-icon">📄</div>
+                                <div class="resource-type">PDF</div>
+                            </div>
+                            <div class="video-info">
+                                <h5>Linux Guide & Commands</h5>
+                                <p>Complete Linux reference guide and command cheatsheet</p>
+                                <div class="video-meta">
+                                    <span>📚 Study Material</span>
+                                    <span class="not-started">○ Download Available</span>
+                                </div>
+                                <div style="display: flex; gap: 10px;">
+                                    <button class="btn btn-small btn-view-pdf" data-pdf-url="https://manojdevopsvideos.s3.amazonaws.com/linux.pdf" style="flex: 1;">
+                                        View PDF
+                                    </button>
+                                    <a href="https://manojdevopsvideos.s3.amazonaws.com/linux.pdf" target="_blank" class="btn btn-small btn-secondary" style="flex: 1; text-align: center; text-decoration: none;">
+                                        Open Direct
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Add Your Video from S3 -->
+                        <div class="video-card">
+                            <div class="video-thumbnail">
+                                <div class="play-button">▶</div>
+                                <div class="resource-icon" style="font-size: 60px; padding: 40px;">🎥</div>
+                            </div>
+                            <div class="video-info">
+                                <h5>Your Course Video</h5>
+                                <p>Upload your MP4 video to S3 bucket and update URL below</p>
+                                <div class="video-meta">
+                                    <span>⏱️ Duration varies</span>
+                                    <span class="not-started">○ Ready to watch</span>
+                                </div>
+                                <button class="btn btn-small btn-video" 
+                                        data-video-url="https://manojdevopsvideos.s3.amazonaws.com/your-video.mp4" 
+                                        data-video-type="mp4">
+                                    Watch Video
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Player Modal -->
+    <div id="videoModal" class="video-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="video-container">
+                <iframe 
+                    id="videoPlayer" 
+                    width="100%" 
+                    height="100%" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+            <div class="video-controls">
+                <button class="btn btn-secondary" id="markComplete">Mark as Complete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF Viewer Modal -->
+    <div id="pdfModal" class="video-modal">
+        <div class="modal-content" style="max-width: 95%; max-height: 95vh;">
+            <span class="close-modal" id="closePdfModal">&times;</span>
+            <div class="pdf-container" style="height: calc(95vh - 100px);">
+                <iframe 
+                    id="pdfViewer" 
+                    width="100%" 
+                    height="100%" 
+                    frameborder="0"
+                    style="border-radius: 0;">
+                </iframe>
+            </div>
+            <div class="video-controls">
+                <a id="pdfDownloadBtn" href="#" download class="btn btn-secondary">Download PDF</a>
+                <button class="btn btn-primary" id="closePdfBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Manoj Technologies</h3>
+                    <p>Empowering careers through quality software training</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="courses.html">Courses</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Email: info@skyedge.com</p>
+                    <p>Phone: (123) 456-7890</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Manoj Technologies. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
