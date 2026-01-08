@@ -7,17 +7,18 @@ const SUPABASE_CONFIG = {
 };
 
 // Initialize Supabase client
-let supabase = null;
+let supabaseClient = null;
 
 // Check if Supabase is configured
 function initSupabase() {
     if (SUPABASE_CONFIG.url && SUPABASE_CONFIG.anonKey) {
         
         if (typeof window.supabase !== 'undefined') {
-            supabase = window.supabase.createClient(
+            supabaseClient = window.supabase.createClient(
                 SUPABASE_CONFIG.url,
                 SUPABASE_CONFIG.anonKey
             );
+            window.supabaseClient = supabaseClient;
             console.log('✅ Supabase connected successfully!');
             console.log('🗄️ Database backend is active - data will be saved to cloud');
             return true;
@@ -34,6 +35,13 @@ function initSupabase() {
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', initSupabase);
 
+// Also try to initialize immediately if DOM is already loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSupabase);
+} else {
+    // DOM already loaded
+    initSupabase();
+}
+
 // Export for use in other files
-window.supabaseClient = supabase;
-window.isSupabaseEnabled = () => supabase !== null;
+window.isSupabaseEnabled = () => supabaseClient !== null;
