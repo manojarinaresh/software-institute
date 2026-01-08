@@ -393,7 +393,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===== Registration Functionality =====
     const registerForm = document.getElementById('registerForm');
     if (registerForm) {
-        registerForm.addEventListener('submit', function(e) {
+        registerForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const fullName = document.getElementById('fullName').value;

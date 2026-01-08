@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Connection Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2d3748;
+            margin-bottom: 30px;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: 600;
+        }
+        .success {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        .error {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+        .info {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+        button {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #5a67d8;
+        }
+        pre {
+            background: #2d3748;
+            color: #48bb78;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-box">
+        <h1>🔧 Database Connection Test</h1>
+        
+        <div id="status"></div>
+        
+        <button onclick="testConnection()">Test Supabase Connection</button>
+        <button onclick="testRegistration()">Test Registration</button>
+        <button onclick="testLogin()">Test Login</button>
+        <button onclick="checkTables()">Check Tables</button>
+        
+        <div id="results"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/supabase-db.js"></script>
+    
+    <script>
+        const statusDiv = document.getElementById('status');
+        const resultsDiv = document.getElementById('results');
+
+        function showStatus(message, type = 'info') {
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function showResults(data) {
+            resultsDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        }
+
+        async function testConnection() {
+            showStatus('Testing Supabase connection...', 'info');
+            
+            if (!window.supabaseClient) {
+                showStatus('❌ Supabase client not initialized!', 'error');
+                showResults({ error: 'supabaseClient is null or undefined' });
+                return;
+            }
+
+            try {
+                const { data, error } = await window.supabaseClient
+                    .from('users')
+                    .select('count')
+                    .limit(1);
+
+                if (error) {
+                    showStatus('❌ Connection failed: ' + error.message, 'error');
+                    showResults({ error: error });
+                } else {
+                    showStatus('✅ Supabase connected successfully!', 'success');
+                    showResults({ status: 'Connected', data: data });
+                }
+            } catch (err) {
+                showStatus('❌ Exception: ' + err.message, 'error');
+                showResults({ exception: err.toString() });
+            }
+        }
+
+        async function testRegistration() {
+            showStatus('Testing user registration...', 'info');
+
+            if (!window.dbHelpers) {
+                showStatus('❌ Database helpers not loaded!', 'error');
+                return;
+            }
+
+            const testUser = {
+                name: 'Test User ' + Date.now(),
+                email: 'test' + Date.now() + '@example.com',
+                phone: '9876543210',
+                password: 'test123456'
+            };
+
+            try {
+                const result = await window.dbHelpers.registerUser(
+                    testUser.name,
+                    testUser.email,
+                    testUser.phone,
+                    testUser.password
+                );
+
+                if (result.success) {
+                    showStatus('✅ Registration successful!', 'success');
+                    showResults({ testUser, result });
+                } else {
+                    showStatus('❌ Registration failed: ' + result.error, 'error');
+                    showResults({ testUser, result });
+                }
+            } catch (err) {
+                showStatus('❌ Exception: ' + err.message, 'error');
+                showResults({ exception: err.toString() });
+            }
+        }
+
+        async function testLogin() {
+            showStatus('Testing login with demo user...', 'info');
+
+            if (!window.dbHelpers) {
+                showStatus('❌ Database helpers not loaded!', 'error');
+                return;
+            }
+
+            // First, try to create a demo user
+            const demoEmail = 'demo@manojtech.com';
+            const demoPassword = 'demo123456';
+
+            try {
+                // Try to register demo user
+                await window.dbHelpers.registerUser(
+                    'Demo User',
+                    demoEmail,
+                    '9999999999',
+                    demoPassword
+                );
+
+                // Now try to login
+                const result = await window.dbHelpers.loginUser(demoEmail, demoPassword);
+
+                if (result.success) {
+                    showStatus('✅ Login successful!', 'success');
+                    showResults({ demoEmail, result });
+                } else {
+                    showStatus('❌ Login failed: ' + result.error, 'error');
+                    showResults({ demoEmail, result });
+                }
+            } catch (err) {
+                showStatus('❌ Exception: ' + err.message, 'error');
+                showResults({ exception: err.toString() });
+            }
+        }
+
+        async function checkTables() {
+            showStatus('Checking database tables...', 'info');
+
+            if (!window.supabaseClient) {
+                showStatus('❌ Supabase client not initialized!', 'error');
+                return;
+            }
+
+            try {
+                const tables = ['users', 'subscriptions', 'login_history', 'email_notifications'];
+                const results = {};
+
+                for (const table of tables) {
+                    const { data, error } = await window.supabaseClient
+                        .from(table)
+                        .select('*')
+                        .limit(1);
+
+                    results[table] = {
+                        exists: !error,
+                        error: error ? error.message : null,
+                        sampleData: data
+                    };
+                }
+
+                showStatus('✅ Table check complete', 'success');
+                showResults(results);
+            } catch (err) {
+                showStatus('❌ Exception: ' + err.message, 'error');
+                showResults({ exception: err.toString() });
+            }
+        }
+
+        // Auto-test connection on load
+        window.addEventListener('load', () => {
+            setTimeout(testConnection, 1000);
+        });
+    </script>
+</body>
+</html>
