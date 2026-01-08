@@ -579,7 +579,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Update payment modal
                 document.getElementById('paymentPlan').textContent = plan.charAt(0).toUpperCase() + plan.slice(1) + ' Plan';
                 document.getElementById('paymentDuration').textContent = duration + ' days';
-                document.getElementById('paymentAmount').textContent = '$' + price + '.00';
+                document.getElementById('paymentAmount').textContent = '₹' + price + '.00';
                 
                 // Show modal
                 paymentModal.classList.add('active');
