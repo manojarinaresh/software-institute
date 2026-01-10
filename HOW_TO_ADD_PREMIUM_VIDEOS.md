@@ -96,7 +96,7 @@ Find and replace these placeholders with your actual video IDs:
 2. **Git Session 1** - `QpXXR-tmPos`
 
 ### Premium Videos (Subscription Required):
-1. **Advanced AWS Deployment** - `YOUR_VIDEO_ID_1` ⬅️ Replace this
+1. **Advanced AWS Services** - `YOUR_VIDEO_ID_1` ⬅️ Replace this
 2. **Docker & Kubernetes Mastery** - `YOUR_VIDEO_ID_2` ⬅️ Replace this
 3. **CI/CD Pipeline Setup** - `YOUR_VIDEO_ID_3` ⬅️ Replace this
 4. **Terraform & Infrastructure as Code** - `YOUR_VIDEO_ID_4` ⬅️ Replace this
