@@ -545,22 +545,26 @@ document.addEventListener('DOMContentLoaded', function() {
             // Admin-specific navigation control
             if (isAdmin && isLearningPage) {
                 // Hide regular user navigation items in header
+                const homeNav = document.getElementById('homeNav');
                 const aboutNav = document.getElementById('aboutNav');
                 const coursesNav = document.getElementById('coursesNav');
                 const contactNav = document.getElementById('contactNav');
                 const adminDashboardNav = document.getElementById('adminDashboardNav');
                 
+                if (homeNav) homeNav.style.display = 'none';
                 if (aboutNav) aboutNav.style.display = 'none';
                 if (coursesNav) coursesNav.style.display = 'none';
                 if (contactNav) contactNav.style.display = 'none';
                 if (adminDashboardNav) adminDashboardNav.style.display = 'block';
                 
                 // Hide regular user navigation items in footer
+                const homeFooterNav = document.getElementById('homeFooterNav');
                 const aboutFooterNav = document.getElementById('aboutFooterNav');
                 const coursesFooterNav = document.getElementById('coursesFooterNav');
                 const contactFooterNav = document.getElementById('contactFooterNav');
                 const adminDashboardFooterNav = document.getElementById('adminDashboardFooterNav');
                 
+                if (homeFooterNav) homeFooterNav.style.display = 'none';
                 if (aboutFooterNav) aboutFooterNav.style.display = 'none';
                 if (coursesFooterNav) coursesFooterNav.style.display = 'none';
                 if (contactFooterNav) contactFooterNav.style.display = 'none';
