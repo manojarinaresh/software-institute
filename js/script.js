@@ -576,13 +576,28 @@ document.addEventListener('DOMContentLoaded', function() {
         const noSubscriptionMessage = document.getElementById('noSubscriptionMessage');
         const courseContent = document.getElementById('courseContent');
         
+        // Check if admin is logged in - grant full access to all videos
+        const isAdmin = sessionStorage.getItem('adminAuthenticated') === 'true';
+        
         // Check if user has active subscription
-        let hasActiveSubscription = false;
+        let hasActiveSubscription = isAdmin || false; // Admin gets automatic access
         
         // Handle both database format (expiry_date) and old localStorage format (expiryDate)
         const expiryDateValue = user.subscription?.expiry_date || user.subscription?.expiryDate;
         
-        if (!user.subscription || !expiryDateValue) {
+        if (isAdmin) {
+            // Admin access - show admin badge
+            if (subStatus) {
+                subStatus.textContent = '👑 Admin Access - Full Access';
+                subStatus.className = 'subscription-status active';
+            }
+            if (subExpiry) {
+                subExpiry.textContent = 'Administrator - All premium content unlocked';
+            }
+            if (subscribeBtn) {
+                subscribeBtn.style.display = 'none'; // Hide subscribe button for admin
+            }
+        } else if (!user.subscription || !expiryDateValue) {
             // No subscription
             if (subStatus) {
                 subStatus.textContent = 'No Subscription';
