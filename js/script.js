@@ -546,57 +546,65 @@ document.addEventListener('DOMContentLoaded', function() {
             if (isAdmin && isLearningPage) {
                 console.log('Admin detected - hiding navigation links');
                 
-                // Hide regular user navigation items in header
-                const homeNav = document.getElementById('homeNav');
-                const aboutNav = document.getElementById('aboutNav');
-                const coursesNav = document.getElementById('coursesNav');
-                const contactNav = document.getElementById('contactNav');
-                const adminDashboardNav = document.getElementById('adminDashboardNav');
-                
-                if (homeNav) {
-                    homeNav.style.display = 'none';
-                    console.log('Hid homeNav');
-                }
-                if (aboutNav) {
-                    aboutNav.style.display = 'none';
-                    console.log('Hid aboutNav');
-                }
-                if (coursesNav) {
-                    coursesNav.style.display = 'none';
-                    console.log('Hid coursesNav');
-                }
-                if (contactNav) {
-                    contactNav.style.display = 'none';
-                    console.log('Hid contactNav');
-                }
-                if (adminDashboardNav) {
-                    adminDashboardNav.style.display = 'block';
-                    console.log('Showed adminDashboardNav');
-                }
-                
-                // Hide regular user navigation items in footer
-                const homeFooterNav = document.getElementById('homeFooterNav');
-                const aboutFooterNav = document.getElementById('aboutFooterNav');
-                const coursesFooterNav = document.getElementById('coursesFooterNav');
-                const contactFooterNav = document.getElementById('contactFooterNav');
-                const adminDashboardFooterNav = document.getElementById('adminDashboardFooterNav');
-                
-                if (homeFooterNav) {
-                    homeFooterNav.style.display = 'none';
-                    console.log('Hid homeFooterNav');
-                }
-                if (aboutFooterNav) {
-                    aboutFooterNav.style.display = 'none';
-                    console.log('Hid aboutFooterNav');
-                }
-                if (coursesFooterNav) {
-                    coursesFooterNav.style.display = 'none';
-                    console.log('Hid coursesFooterNav');
-                }
-                if (contactFooterNav) {
-                    contactFooterNav.style.display = 'none';
-                    console.log('Hid contactFooterNav');
-                }
+                // Use setTimeout to ensure DOM is fully loaded
+                setTimeout(() => {
+                    // Hide regular user navigation items in header
+                    const homeNav = document.getElementById('homeNav');
+                    const aboutNav = document.getElementById('aboutNav');
+                    const coursesNav = document.getElementById('coursesNav');
+                    const contactNav = document.getElementById('contactNav');
+                    const adminDashboardNav = document.getElementById('adminDashboardNav');
+                    
+                    if (homeNav) {
+                        homeNav.style.setProperty('display', 'none', 'important');
+                        console.log('Hid homeNav');
+                    }
+                    if (aboutNav) {
+                        aboutNav.style.setProperty('display', 'none', 'important');
+                        console.log('Hid aboutNav');
+                    }
+                    if (coursesNav) {
+                        coursesNav.style.setProperty('display', 'none', 'important');
+                        console.log('Hid coursesNav');
+                    }
+                    if (contactNav) {
+                        contactNav.style.setProperty('display', 'none', 'important');
+                        console.log('Hid contactNav');
+                    }
+                    if (adminDashboardNav) {
+                        adminDashboardNav.style.setProperty('display', 'block', 'important');
+                        console.log('Showed adminDashboardNav');
+                    }
+                    
+                    // Hide regular user navigation items in footer
+                    const homeFooterNav = document.getElementById('homeFooterNav');
+                    const aboutFooterNav = document.getElementById('aboutFooterNav');
+                    const coursesFooterNav = document.getElementById('coursesFooterNav');
+                    const contactFooterNav = document.getElementById('contactFooterNav');
+                    const adminDashboardFooterNav = document.getElementById('adminDashboardFooterNav');
+                    
+                    if (homeFooterNav) {
+                        homeFooterNav.style.setProperty('display', 'none', 'important');
+                        console.log('Hid homeFooterNav');
+                    }
+                    if (aboutFooterNav) {
+                        aboutFooterNav.style.setProperty('display', 'none', 'important');
+                        console.log('Hid aboutFooterNav');
+                    }
+                    if (coursesFooterNav) {
+                        coursesFooterNav.style.setProperty('display', 'none', 'important');
+                        console.log('Hid coursesFooterNav');
+                    }
+                    if (contactFooterNav) {
+                        contactFooterNav.style.setProperty('display', 'none', 'important');
+                        console.log('Hid contactFooterNav');
+                    }
+                    if (adminDashboardFooterNav) {
+                        adminDashboardFooterNav.style.setProperty('display', 'block', 'important');
+                        console.log('Showed adminDashboardFooterNav');
+                    }
+                }, 100);
+            }
                 if (adminDashboardFooterNav) adminDashboardFooterNav.style.display = 'block';
             }
             
