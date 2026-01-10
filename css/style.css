@@ -1361,16 +1361,20 @@ body {
 
 .video-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 .video-card {
     background: var(--bg-white);
     border: 2px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: 15px;
     overflow: hidden;
     transition: all 0.3s;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
 .video-card:hover {
@@ -1888,5 +1892,175 @@ body {
 
     .subscription-info {
         grid-template-columns: 1fr;
+    }
+}
+
+/* ===== Premium Unlock Section Styling ===== */
+.premium-unlock-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    border-radius: 20px;
+    padding: 60px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+    margin-top: 40px;
+}
+
+.premium-unlock-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.premium-unlock-icon {
+    font-size: 100px;
+    margin-bottom: 30px;
+    animation: bounce 2s ease-in-out infinite;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.premium-unlock-section h3 {
+    color: white;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 1;
+}
+
+.premium-unlock-section > p {
+    color: rgba(255,255,255,0.95);
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto 40px;
+    line-height: 1.8;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 1;
+}
+
+.premium-features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    max-width: 900px;
+    margin: 40px auto;
+    position: relative;
+    z-index: 1;
+}
+
+.premium-feature-card {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 15px;
+    padding: 25px 20px;
+    transition: all 0.3s;
+    text-align: left;
+}
+
+.premium-feature-card:hover {
+    background: rgba(255,255,255,0.25);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.premium-feature-card .feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.premium-feature-card h4 {
+    color: white;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.premium-feature-card p {
+    color: rgba(255,255,255,0.9);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.premium-cta-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    padding: 18px 50px;
+    border-radius: 50px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 30px;
+    box-shadow: 0 10px 30px rgba(245, 87, 108, 0.4);
+    transition: all 0.3s;
+    position: relative;
+    z-index: 1;
+}
+
+.premium-cta-button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(245, 87, 108, 0.6);
+}
+
+.premium-cta-button::before {
+    content: '🚀';
+    margin-right: 10px;
+}
+
+.premium-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 768px) {
+    .premium-unlock-section {
+        padding: 40px 20px;
+    }
+    
+    .premium-unlock-section h3 {
+        font-size: 1.8rem;
+    }
+    
+    .premium-unlock-section > p {
+        font-size: 1rem;
+    }
+    
+    .premium-features-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .premium-cta-button {
+        font-size: 1.1rem;
+        padding: 15px 35px;
     }
 }
