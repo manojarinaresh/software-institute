@@ -655,8 +655,31 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        // Update progress statistics
+        // Update progress statistics and video card statuses
         updateProgressStatistics(hasActiveSubscription);
+        updateVideoCardStatuses();
+    }
+    
+    // Function to update video card completion statuses
+    function updateVideoCardStatuses() {
+        const completedVideos = JSON.parse(localStorage.getItem('completedVideos') || '[]');
+        const videoCards = document.querySelectorAll('.video-card');
+        
+        videoCards.forEach(card => {
+            const button = card.querySelector('.btn-video');
+            if (button) {
+                const videoId = button.getAttribute('data-video');
+                const videoUrl = button.getAttribute('data-video-url');
+                const identifier = videoUrl || videoId;
+                
+                const statusSpan = card.querySelector('.not-started, .completed, .in-progress');
+                if (statusSpan && identifier && completedVideos.includes(identifier)) {
+                    statusSpan.textContent = '✓ Completed';
+                    statusSpan.className = 'completed';
+                    statusSpan.style.color = '#27ae60';
+                }
+            }
+        });
     }
     
     // Function to update progress statistics
