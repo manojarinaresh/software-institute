@@ -791,7 +791,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (subscribeButtons.length > 0) {
         subscribeButtons.forEach(button => {
-            button.addEventListener('click', async function() {
+            button.addEventListener('click', function() {
                 // Get current user
                 const user = getCurrentUser();
                 if (!user) {
@@ -819,7 +819,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Initialize Razorpay payment
                 try {
-                    await initializeRazorpayPayment(
+                    initializeRazorpayPayment(
                         plan,
                         price,
                         user.id,

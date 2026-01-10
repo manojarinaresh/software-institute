@@ -13,7 +13,7 @@ const PAYMENT_CONFIG = {
 };
 
 // Initialize Razorpay payment
-async function initializeRazorpayPayment(plan, amount, userId, userEmail, userName) {
+function initializeRazorpayPayment(plan, amount, userId, userEmail, userName) {
     // Validate user is logged in
     if (!userId || !userEmail) {
         showNotification('Please login before subscribing', 'error');
