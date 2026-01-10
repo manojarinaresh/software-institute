@@ -255,7 +255,7 @@
             </div>
             <ul class="nav-menu">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="learning.html">Learning Portal</a></li>
+                <li id="myPortalNav" style="display: none;"><a href="learning.html">📚 My Portal</a></li>
                 <li id="logoutNav" style="display: none;"><a href="#" onclick="logoutAdmin()" style="color: #e53e3e;">🚪 Logout</a></li>
             </ul>
         </div>
@@ -414,6 +414,7 @@
         function showDashboard() {
             document.getElementById('passwordModal').style.display = 'none';
             document.getElementById('adminContent').style.display = 'block';
+            document.getElementById('myPortalNav').style.display = 'block';
             document.getElementById('logoutNav').style.display = 'block';
             loadAllData();
         }
@@ -422,6 +423,7 @@
             if (confirm('Are you sure you want to logout?')) {
                 sessionStorage.removeItem('adminAuthenticated');
                 document.getElementById('adminContent').style.display = 'none';
+                document.getElementById('myPortalNav').style.display = 'none';
                 document.getElementById('logoutNav').style.display = 'none';
                 document.getElementById('adminPassword').value = '';
                 document.getElementById('passwordError').style.display = 'none';
