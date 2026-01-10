@@ -654,6 +654,44 @@ document.addEventListener('DOMContentLoaded', function() {
                 courseContent.style.display = 'none';
             }
         }
+        
+        // Update progress statistics
+        updateProgressStatistics(hasActiveSubscription);
+    }
+    
+    // Function to update progress statistics
+    function updateProgressStatistics(hasActiveSubscription) {
+        const coursesEnrolledElement = document.getElementById('coursesEnrolled');
+        const videosCompletedElement = document.getElementById('videosCompleted');
+        const learningHoursElement = document.getElementById('learningHours');
+        
+        if (hasActiveSubscription) {
+            // Count available courses/modules in the courseContent section
+            const courseModules = document.querySelectorAll('#courseContent .course-module');
+            const videoCards = document.querySelectorAll('#courseContent .video-card');
+            
+            // Update courses enrolled (number of course modules available)
+            if (coursesEnrolledElement) {
+                coursesEnrolledElement.textContent = courseModules.length || 1;
+            }
+            
+            // Get completed videos from localStorage
+            const completedVideos = JSON.parse(localStorage.getItem('completedVideos') || '[]');
+            if (videosCompletedElement) {
+                videosCompletedElement.textContent = completedVideos.length;
+            }
+            
+            // Calculate learning hours (estimate: 15 min per completed video)
+            if (learningHoursElement) {
+                const hours = Math.round((completedVideos.length * 15) / 60 * 10) / 10;
+                learningHoursElement.textContent = hours;
+            }
+        } else {
+            // No active subscription - show zeros
+            if (coursesEnrolledElement) coursesEnrolledElement.textContent = '0';
+            if (videosCompletedElement) videosCompletedElement.textContent = '0';
+            if (learningHoursElement) learningHoursElement.textContent = '0';
+        }
     }
 
     // ===== Subscription Page Protection =====
@@ -1040,9 +1078,47 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Mark video as complete
     const markCompleteBtn = document.getElementById('markComplete');
+    let currentVideoId = null;
+    
+    // Set current video when opening modal
+    const videoButtons = document.querySelectorAll('.btn-video');
+    if (videoButtons.length > 0) {
+        videoButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Store the video identifier (could be URL or title)
+                currentVideoId = this.getAttribute('data-video-url') || this.closest('.video-card').querySelector('h5')?.textContent || 'video-' + Date.now();
+            });
+        });
+    }
+    
     if (markCompleteBtn) {
         markCompleteBtn.addEventListener('click', function() {
-            alert('Video marked as complete! ✓\n\nYour progress has been saved.');
+            if (currentVideoId) {
+                // Get completed videos from localStorage
+                let completedVideos = JSON.parse(localStorage.getItem('completedVideos') || '[]');
+                
+                // Add current video if not already completed
+                if (!completedVideos.includes(currentVideoId)) {
+                    completedVideos.push(currentVideoId);
+                    localStorage.setItem('completedVideos', JSON.stringify(completedVideos));
+                    
+                    // Update progress statistics
+                    const user = getCurrentUser();
+                    if (user && user.subscription) {
+                        const expiryDateValue = user.subscription.expiry_date || user.subscription.expiryDate;
+                        if (expiryDateValue) {
+                            const expiryDate = new Date(expiryDateValue);
+                            const today = new Date();
+                            const daysRemaining = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
+                            updateProgressStatistics(daysRemaining > 0);
+                        }
+                    }
+                    
+                    alert('Video marked as complete! ✓\n\nYour progress has been saved.');
+                } else {
+                    alert('This video is already marked as complete! ✓');
+                }
+            }
             closeVideoModal();
         });
     }
