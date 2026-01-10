@@ -293,12 +293,15 @@ document.addEventListener('DOMContentLoaded', function() {
             
             console.log('Login attempt:', email);
             
-            // Try Supabase first, fallback to localStorage
+            // ALWAYS use Supabase database for login - never use cached localStorage passwords
             if (window.dbHelpers) {
                 const result = await window.dbHelpers.loginUser(email, password);
                 
                 if (result.success) {
                     console.log('✅ Logged in from Supabase database');
+                    
+                    // Clear any old cached data before storing new session
+                    localStorage.removeItem('registeredUsers'); // Remove old password cache
                     
                     // Get user subscription from database
                     const subscription = await window.dbHelpers.getUserSubscription(result.user.id);
@@ -334,58 +337,18 @@ document.addEventListener('DOMContentLoaded', function() {
                         window.location.href = 'learning.html';
                     }, 500);
                     
-                } else if (result.fallback) {
-                    // Supabase failed, use localStorage fallback
-                    console.warn('⚠️ Supabase unavailable, using localStorage');
-                    loginWithLocalStorage();
                 } else {
-                    // Login failed
+                    // Login failed - show error from database
                     messageDiv.className = 'form-message error';
-                    messageDiv.textContent = '✗ ' + result.error;
+                    messageDiv.textContent = '✗ ' + (result.error || 'Invalid email or password. Please check your credentials.');
                     messageDiv.style.display = 'block';
                 }
             } else {
-                // dbHelpers not loaded, use localStorage
-                console.warn('⚠️ Database helpers not loaded, using localStorage');
-                loginWithLocalStorage();
-            }
-            
-            // LocalStorage fallback function
-            function loginWithLocalStorage() {
-                const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-                const user = users.find(u => u.email === email && u.password === password);
-                
-                if (user) {
-                    console.log('Login successful for:', email);
-                    
-                    const userData = {
-                        email: user.email,
-                        name: user.name,
-                        phone: user.phone,
-                        subscription: user.subscription || null,
-                        loginTime: new Date().toISOString()
-                    };
-                    
-                    localStorage.setItem('currentUser', JSON.stringify(userData));
-                    sessionStorage.setItem('currentUser', JSON.stringify(userData));
-                    
-                    if (window.emailService) {
-                        window.emailService.sendLoginEmail(userData);
-                    }
-                    
-                    messageDiv.className = 'form-message success';
-                    messageDiv.textContent = '✓ Login successful! Redirecting...';
-                    messageDiv.style.display = 'block';
-                    
-                    setTimeout(() => {
-                        window.location.href = 'learning.html';
-                    }, 500);
-                } else {
-                    console.log('Login failed for:', email);
-                    messageDiv.className = 'form-message error';
-                    messageDiv.textContent = '✗ Invalid email or password!';
-                    messageDiv.style.display = 'block';
-                }
+                // Database not available - show error message
+                messageDiv.className = 'form-message error';
+                messageDiv.textContent = '✗ Database connection unavailable. Please try again later.';
+                messageDiv.style.display = 'block';
+                console.error('Database helpers not loaded');
             }
         });
     }
