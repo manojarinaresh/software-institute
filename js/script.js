@@ -21,6 +21,28 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Hide admin link if regular user is logged in
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser'));
+    const adminLoginNav = document.getElementById('adminLoginNav');
+    const studentLoginNav = document.getElementById('studentLoginNav');
+    
+    if (currentUser && adminLoginNav) {
+        // User is logged in - hide admin link
+        adminLoginNav.style.display = 'none';
+        
+        // Also update student login link to show "My Portal" or logout
+        if (studentLoginNav) {
+            const studentLoginLink = document.getElementById('studentLoginLink');
+            if (studentLoginLink) {
+                studentLoginLink.textContent = 'My Portal';
+                studentLoginLink.href = 'learning.html';
+            }
+        }
+    } else if (!currentUser && adminLoginNav) {
+        // No user logged in - show admin link
+        adminLoginNav.style.display = 'list-item';
+    }
+
     // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
