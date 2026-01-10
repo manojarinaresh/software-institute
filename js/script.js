@@ -629,15 +629,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        // Show/hide course content based on subscription status
+        // Show course content to all logged-in users (free videos available)
+        // Only subscription status banner reflects the subscription state
         if (noSubscriptionMessage && courseContent) {
-            if (hasActiveSubscription) {
-                noSubscriptionMessage.style.display = 'none';
-                courseContent.style.display = 'block';
-            } else {
-                noSubscriptionMessage.style.display = 'block';
-                courseContent.style.display = 'none';
-            }
+            // Always show free course content (DevOps Demo 1 and Git Session 1)
+            noSubscriptionMessage.style.display = 'none';
+            courseContent.style.display = 'block';
         }
         
         // Update progress statistics and video card statuses
