@@ -1361,9 +1361,9 @@ body {
 
 .video-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 30px;
-    max-width: 1400px;
+    grid-template-columns: repeat(auto-fill, minmax(224px, 1fr));
+    gap: 21px;
+    max-width: 980px;
     margin: 0 auto;
 }
 
@@ -1373,7 +1373,7 @@ body {
     border-radius: 15px;
     overflow: hidden;
     transition: all 0.3s;
-    max-width: 400px;
+    max-width: 280px;
     margin: 0 auto;
 }
 
@@ -1924,8 +1924,8 @@ body {
 }
 
 .premium-unlock-icon {
-    font-size: 100px;
-    margin-bottom: 30px;
+    font-size: 70px;
+    margin-bottom: 21px;
     animation: bounce 2s ease-in-out infinite;
     filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
     position: relative;
