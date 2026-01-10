@@ -109,9 +109,11 @@ ALTER TABLE email_notifications ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Enable insert for registration" ON users;
 DROP POLICY IF EXISTS "Enable read access for all users" ON users;
 DROP POLICY IF EXISTS "Users can update own data" ON users;
+DROP POLICY IF EXISTS "Users can delete own data" ON users;
 DROP POLICY IF EXISTS "Enable insert for subscriptions" ON subscriptions;
 DROP POLICY IF EXISTS "Enable read for subscriptions" ON subscriptions;
 DROP POLICY IF EXISTS "Enable update for subscriptions" ON subscriptions;
+DROP POLICY IF EXISTS "Enable delete for subscriptions" ON subscriptions;
 DROP POLICY IF EXISTS "Enable insert for login history" ON login_history;
 DROP POLICY IF EXISTS "Enable read for login history" ON login_history;
 DROP POLICY IF EXISTS "Enable all for email notifications" ON email_notifications;
@@ -129,6 +131,10 @@ CREATE POLICY "Enable read access for all users" ON users
 CREATE POLICY "Users can update own data" ON users
     FOR UPDATE USING (true);
 
+-- Allow users to be deleted (for admin functionality)
+CREATE POLICY "Users can delete own data" ON users
+    FOR DELETE USING (true);
+
 -- Allow insert for subscriptions
 CREATE POLICY "Enable insert for subscriptions" ON subscriptions
     FOR INSERT WITH CHECK (true);
@@ -140,6 +146,10 @@ CREATE POLICY "Enable read for subscriptions" ON subscriptions
 -- Allow update for subscriptions
 CREATE POLICY "Enable update for subscriptions" ON subscriptions
     FOR UPDATE USING (true);
+
+-- Allow delete for subscriptions (for admin functionality)
+CREATE POLICY "Enable delete for subscriptions" ON subscriptions
+    FOR DELETE USING (true);
 
 -- Allow insert for login history
 CREATE POLICY "Enable insert for login history" ON login_history
