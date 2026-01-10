@@ -45,9 +45,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Update Enroll button on courses page if user is logged in
     const enrollBtn = document.getElementById('enrollBtn');
-    if (enrollBtn && currentUser) {
-        enrollBtn.textContent = 'Go to My Portal';
-        enrollBtn.href = 'learning.html';
+    const courseActionButtons = document.getElementById('courseActionButtons');
+    
+    if (courseActionButtons && currentUser) {
+        // User is logged in - show appropriate message
+        courseActionButtons.innerHTML = `
+            <a href="learning.html" class="btn btn-primary">Go to My Portal</a>
+            <p style="margin: 15px 0; color: var(--text-light);">Want more content? <a href="subscription.html" style="color: #3b82f6;">Subscribe for Premium Access</a></p>
+        `;
     }
 
     // Smooth scrolling for anchor links
@@ -637,11 +642,27 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Show course content to all logged-in users (free videos available)
-        // Only subscription status banner reflects the subscription state
+        // Show/hide premium content based on subscription status
         if (noSubscriptionMessage && courseContent) {
             // Always show free course content (DevOps Demo 1 and Git Session 1)
             noSubscriptionMessage.style.display = 'none';
             courseContent.style.display = 'block';
+            
+            // Show/hide premium content based on subscription
+            const premiumContent = document.getElementById('premiumContent');
+            const subscriptionUpsell = document.getElementById('subscriptionUpsell');
+            
+            if (premiumContent && subscriptionUpsell) {
+                if (hasActiveSubscription) {
+                    // User has active subscription - show premium content
+                    premiumContent.style.display = 'block';
+                    subscriptionUpsell.style.display = 'none';
+                } else {
+                    // No active subscription - show upsell
+                    premiumContent.style.display = 'none';
+                    subscriptionUpsell.style.display = 'block';
+                }
+            }
         }
         
         // Update progress statistics and video card statuses

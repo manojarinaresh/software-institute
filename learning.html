@@ -48,8 +48,8 @@
         </div>
     </section>
 
-    <!-- Subscription Status Banner - Hidden -->
-    <div id="subscriptionBanner" class="subscription-banner" style="display: none;">
+    <!-- Subscription Status Banner -->
+    <div id="subscriptionBanner" class="subscription-banner">
         <div class="container">
             <div class="banner-content">
                 <div class="banner-info">
@@ -102,17 +102,18 @@
                 </div>
 
                 <div id="courseContent" style="display: none;">
-                    <h3>Free Video Tutorials</h3>
-                    <p style="color: var(--text-light); margin-bottom: 30px;">🎁 These videos are available to all registered users at no cost!</p>
-                    
-                    <!-- Course Materials -->
-                    <div class="course-module">
-                        <div class="module-header">
-                            <h4>📚 Video Tutorials</h4>
-                            <div class="module-progress">
-                                <span>Available Videos: 2</span>
+                    <!-- Free Content Section -->
+                    <div class="content-section" style="margin-bottom: 40px;">
+                        <h3>🎁 Free Video Tutorials</h3>
+                        <p style="color: var(--text-light); margin-bottom: 30px;">Available to all registered users at no cost!</p>
+                        
+                        <div class="course-module">
+                            <div class="module-header">
+                                <h4>📚 Free Tutorials</h4>
+                                <div class="module-progress">
+                                    <span>Available Videos: 2</span>
+                                </div>
                             </div>
-                        </div>
                         <div class="video-grid">
                             <!-- YouTube Video Card - Demo 1 -->
                             <div class="video-card">
@@ -156,6 +157,104 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    </div>
+
+                    <!-- Premium Content Section -->
+                    <div class="content-section" id="premiumContent" style="display: none;">
+                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 12px; margin-bottom: 20px; color: white;">
+                            <h3 style="margin: 0; color: white;">⭐ Premium Content</h3>
+                            <p style="margin: 10px 0 0 0; opacity: 0.9;">Exclusive advanced tutorials for subscribers</p>
+                        </div>
+                        
+                        <div class="course-module">
+                            <div class="module-header">
+                                <h4>🎓 Advanced Tutorials</h4>
+                                <div class="module-progress">
+                                    <span>Premium Videos: 3</span>
+                                </div>
+                            </div>
+                            <div class="video-grid">
+                                <!-- Premium Video 1 -->
+                                <div class="video-card">
+                                    <div class="video-thumbnail">
+                                        <div class="play-button">▶</div>
+                                        <div class="resource-icon" style="font-size: 60px; padding: 40px;">🎥</div>
+                                    </div>
+                                    <div class="video-info">
+                                        <h5>Advanced AWS Deployment</h5>
+                                        <p>Complete AWS deployment pipeline tutorial</p>
+                                        <div class="video-meta">
+                                            <span>⏱️ Full Tutorial</span>
+                                            <span class="not-started">○ Not Started</span>
+                                        </div>
+                                        <button class="btn btn-small btn-video" 
+                                                data-video="SAMPLE_VIDEO_ID_1" 
+                                                data-video-type="youtube">
+                                            Watch Video
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Premium Video 2 -->
+                                <div class="video-card">
+                                    <div class="video-thumbnail">
+                                        <div class="play-button">▶</div>
+                                        <div class="resource-icon" style="font-size: 60px; padding: 40px;">🎥</div>
+                                    </div>
+                                    <div class="video-info">
+                                        <h5>Docker & Kubernetes Mastery</h5>
+                                        <p>Container orchestration deep dive</p>
+                                        <div class="video-meta">
+                                            <span>⏱️ Full Tutorial</span>
+                                            <span class="not-started">○ Not Started</span>
+                                        </div>
+                                        <button class="btn btn-small btn-video" 
+                                                data-video="SAMPLE_VIDEO_ID_2" 
+                                                data-video-type="youtube">
+                                            Watch Video
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Premium Video 3 -->
+                                <div class="video-card">
+                                    <div class="video-thumbnail">
+                                        <div class="play-button">▶</div>
+                                        <div class="resource-icon" style="font-size: 60px; padding: 40px;">🎥</div>
+                                    </div>
+                                    <div class="video-info">
+                                        <h5>CI/CD Pipeline Setup</h5>
+                                        <p>Jenkins, GitLab CI, GitHub Actions</p>
+                                        <div class="video-meta">
+                                            <span>⏱️ Full Tutorial</span>
+                                            <span class="not-started">○ Not Started</span>
+                                        </div>
+                                        <button class="btn btn-small btn-video" 
+                                                data-video="SAMPLE_VIDEO_ID_3" 
+                                                data-video-type="youtube">
+                                            Watch Video
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subscription Upsell for Non-Subscribers -->
+                    <div id="subscriptionUpsell" style="display: none; text-align: center; padding: 60px 20px; background: linear-gradient(135deg, #f6f8fb 0%, #e9ecef 100%); border-radius: 12px; margin-top: 40px;">
+                        <div style="font-size: 80px; margin-bottom: 20px;">🔐</div>
+                        <h3>Unlock Premium Content</h3>
+                        <p style="margin: 20px 0; color: var(--text-light); max-width: 600px; margin-left: auto; margin-right: auto;">
+                            Get access to 3 advanced video tutorials covering AWS deployment, Docker/Kubernetes, and CI/CD pipelines.
+                        </p>
+                        <ul style="text-align: left; max-width: 500px; margin: 30px auto; padding: 0; list-style: none;">
+                            <li style="padding: 10px 0; color: var(--text);">✅ Advanced AWS Deployment</li>
+                            <li style="padding: 10px 0; color: var(--text);">✅ Docker & Kubernetes Mastery</li>
+                            <li style="padding: 10px 0; color: var(--text);">✅ CI/CD Pipeline Setup</li>
+                            <li style="padding: 10px 0; color: var(--text);">✅ Priority Support</li>
+                        </ul>
+                        <a href="subscription.html" class="btn btn-primary" style="margin-top: 20px; font-size: 18px; padding: 15px 40px;">Subscribe Now</a>
                     </div>
                 </div>
             </div>
