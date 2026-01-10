@@ -254,7 +254,7 @@
                 <h1>Admin Dashboard</h1>
             </div>
             <ul class="nav-menu">
-                <li><a href="index.html">Home</a></li>
+                <li id="homeNavAdmin"><a href="index.html">Home</a></li>
                 <li id="myPortalNav" style="display: none;"><a href="learning.html">📚 My Portal</a></li>
                 <li id="logoutNav" style="display: none;"><a href="#" onclick="logoutAdmin()" style="color: #e53e3e;">🚪 Logout</a></li>
             </ul>
@@ -418,6 +418,13 @@
             document.getElementById('adminContent').style.display = 'block';
             document.getElementById('myPortalNav').style.display = 'block';
             document.getElementById('logoutNav').style.display = 'block';
+            
+            // Hide Home link for admin
+            const homeNavAdmin = document.getElementById('homeNavAdmin');
+            if (homeNavAdmin) {
+                homeNavAdmin.style.display = 'none';
+            }
+            
             loadAllData();
         }
 
