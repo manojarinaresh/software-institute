@@ -43,6 +43,13 @@ document.addEventListener('DOMContentLoaded', function() {
         adminLoginNav.style.display = 'list-item';
     }
 
+    // Update Enroll button on courses page if user is logged in
+    const enrollBtn = document.getElementById('enrollBtn');
+    if (enrollBtn && currentUser) {
+        enrollBtn.textContent = 'Go to My Portal';
+        enrollBtn.href = 'learning.html';
+    }
+
     // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
