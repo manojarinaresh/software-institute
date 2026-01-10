@@ -542,6 +542,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
             
+            // Admin-specific navigation control
+            if (isAdmin && isLearningPage) {
+                // Hide regular user navigation items
+                const aboutNav = document.getElementById('aboutNav');
+                const coursesNav = document.getElementById('coursesNav');
+                const contactNav = document.getElementById('contactNav');
+                const adminDashboardNav = document.getElementById('adminDashboardNav');
+                
+                if (aboutNav) aboutNav.style.display = 'none';
+                if (coursesNav) coursesNav.style.display = 'none';
+                if (contactNav) contactNav.style.display = 'none';
+                if (adminDashboardNav) adminDashboardNav.style.display = 'block';
+            }
+            
             // Refresh subscription from database and display status
             if (isLearningPage) {
                 if (isAdmin && !user) {
