@@ -68,7 +68,7 @@ const EMAIL_CONFIG = {
     serviceId: 'service_abc123xyz',           // ← Paste YOUR Service ID here
     templateId: 'template_xyz789abc',         // ← Paste YOUR Template ID here
     userId: 'aBc123DeF456',                   // ← Paste YOUR Public Key here
-    adminEmail: 'info@manojtechnologies.com'  // ← Your email to receive notifications
+    adminEmail: 'info@manojtechnologies.in'  // ← Your email to receive notifications
 };
 ```
 
@@ -173,7 +173,7 @@ emailService.exportNotificationsAsCSV()
 
 - EmailJS Documentation: https://www.emailjs.com/docs/
 - EmailJS Support: Through their dashboard
-- Your Support: info@manojtechnologies.com | +91 9008176314
+- Your Support: info@manojtechnologies.in | +91 9008176314
 
 ---
 

@@ -76,7 +76,7 @@ When a user purchases a subscription, an email is sent with:
          serviceId: 'YOUR_SERVICE_ID',     // From step 2
          templateId: 'YOUR_TEMPLATE_ID',   // From step 3
          userId: 'YOUR_PUBLIC_KEY',        // From step 4
-         adminEmail: 'info@manojtechnologies.com' // Your receiving email
+         adminEmail: 'info@manojtechnologies.in' // Your receiving email
      };
      ```
 
@@ -235,7 +235,7 @@ For a production environment, consider:
 ## Support
 
 For questions or issues:
-- Email: info@manojtechnologies.com
+- Email: info@manojtechnologies.in
 - Phone: +91 9008176314
 
 ## Files Modified

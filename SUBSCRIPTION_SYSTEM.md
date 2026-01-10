@@ -191,5 +191,5 @@ The system automatically:
 ### Support
 
 For questions or issues, contact:
-- Email: info@manojtechnologies.com
+- Email: info@manojtechnologies.in
 - Phone: (123) 456-7890

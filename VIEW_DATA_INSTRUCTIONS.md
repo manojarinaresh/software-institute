@@ -94,7 +94,7 @@ const EMAIL_CONFIG = {
     serviceId: 'service_abc123',           // Paste your Service ID here
     templateId: 'template_xyz789',         // Paste your Template ID here
     userId: 'abc123xyz789',                // Paste your Public Key here
-    adminEmail: 'info@manojtechnologies.com'  // Your email address
+    adminEmail: 'info@manojtechnologies.in'  // Your email address
 };
 ```
 
@@ -213,4 +213,4 @@ This way you'll have all user activity without setting up emails!
 
 ## Need Help?
 
-Contact: info@manojtechnologies.com | +91 9008176314
+Contact: info@manojtechnologies.in | +91 9008176314

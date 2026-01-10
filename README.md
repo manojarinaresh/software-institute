@@ -126,7 +126,7 @@ fetch('/api/contact', {
 
 ## 📞 Support
 
-For questions or support, contact: info@manojtechnologies.com
+For questions or support, contact: info@manojtechnologies.in
 
 ---
 

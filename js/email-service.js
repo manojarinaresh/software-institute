@@ -12,7 +12,7 @@ const EMAIL_CONFIG = {
     serviceId: 'service_72v3kho',  // ✅ EmailJS Service ID configured
     templateId: 'template_3f2t3mb', // ✅ EmailJS Template ID configured
     userId: 'jVVcQxc9q4_tOUuwz',      // ✅ EmailJS Public Key configured
-    adminEmail: 'info@manojtechnologies.com' // Your admin email to receive notifications
+    adminEmail: 'info@manojtechnologies.in' // Your admin email to receive notifications
 };
 
 // Initialize EmailJS
