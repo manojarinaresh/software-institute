@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Login - Debug</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2d3748;
+            margin-bottom: 30px;
+        }
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #5a67d8;
+        }
+        pre {
+            background: #2d3748;
+            color: #48bb78;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: 600;
+        }
+        .success {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        .error {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+        .info {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-box">
+        <h1>🔧 Login Debug Tool</h1>
+        
+        <div>
+            <input type="email" id="testEmail" placeholder="Email" value="murthy@gmail.com">
+            <input type="password" id="testPassword" placeholder="Password">
+            <button onclick="testLogin()">Test Login</button>
+            <button onclick="listAllUsers()">List All Users</button>
+            <button onclick="checkPasswordHash()">Check Password Hash</button>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/supabase-db.js"></script>
+    
+    <script>
+        const resultsDiv = document.getElementById('results');
+
+        function showResults(title, data, type = 'info') {
+            resultsDiv.innerHTML += `
+                <div class="status ${type}">
+                    <h3>${title}</h3>
+                </div>
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+            `;
+        }
+
+        async function hashPassword(password) {
+            const msgBuffer = new TextEncoder().encode(password);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashHex;
+        }
+
+        async function testLogin() {
+            resultsDiv.innerHTML = '';
+            const email = document.getElementById('testEmail').value;
+            const password = document.getElementById('testPassword').value;
+
+            showResults('Testing Login...', { email, password_length: password.length }, 'info');
+
+            try {
+                // Test direct database query
+                const { data: user, error } = await supabaseClient
+                    .from('users')
+                    .select('*')
+                    .eq('email', email)
+                    .single();
+
+                if (error) {
+                    showResults('❌ User Not Found', { error: error.message }, 'error');
+                    return;
+                }
+
+                showResults('✅ User Found in Database', {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    has_password_hash: !!user.password_hash,
+                    password_hash_length: user.password_hash?.length
+                }, 'success');
+
+                // Test password hash
+                const inputHash = await hashPassword(password);
+                const matches = inputHash === user.password_hash;
+
+                showResults('Password Hash Comparison', {
+                    input_hash_first_10: inputHash.substring(0, 10) + '...',
+                    stored_hash_first_10: user.password_hash.substring(0, 10) + '...',
+                    matches: matches
+                }, matches ? 'success' : 'error');
+
+                if (!matches) {
+                    showResults('⚠️ Password Mismatch', {
+                        message: 'The password you entered does not match the stored hash',
+                        suggestion: 'Try using the password you used during registration'
+                    }, 'error');
+                } else {
+                    // Try actual login function
+                    const loginResult = await window.dbHelpers.loginUser(email, password);
+                    showResults('Login Function Result', loginResult, loginResult.success ? 'success' : 'error');
+                }
+
+            } catch (error) {
+                showResults('❌ Error', { error: error.message }, 'error');
+            }
+        }
+
+        async function listAllUsers() {
+            resultsDiv.innerHTML = '';
+            
+            try {
+                const { data: users, error } = await supabaseClient
+                    .from('users')
+                    .select('id, name, email, created_at')
+                    .order('created_at', { ascending: false });
+
+                if (error) {
+                    showResults('❌ Error', { error: error.message }, 'error');
+                    return;
+                }
+
+                showResults(`📋 All Users (${users.length})`, users, 'success');
+            } catch (error) {
+                showResults('❌ Error', { error: error.message }, 'error');
+            }
+        }
+
+        async function checkPasswordHash() {
+            const password = document.getElementById('testPassword').value;
+            if (!password) {
+                alert('Enter a password first');
+                return;
+            }
+
+            const hash = await hashPassword(password);
+            showResults('Password Hash', {
+                password: password,
+                hash: hash,
+                length: hash.length
+            }, 'info');
+        }
+    </script>
+</body>
+</html>

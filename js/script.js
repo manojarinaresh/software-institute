@@ -974,6 +974,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const videoPlayer = document.getElementById('videoPlayer');
     const closeModal = document.querySelector('.close-modal');
     const videoButtons = document.querySelectorAll('.btn-video');
+    let currentVideoId = null;
     
     if (videoButtons.length > 0) {
         videoButtons.forEach(button => {
@@ -981,6 +982,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 const videoId = this.getAttribute('data-video');
                 const videoUrl = this.getAttribute('data-video-url');
                 const videoType = this.getAttribute('data-video-type') || 'youtube';
+                
+                // Store the video identifier for marking as complete
+                currentVideoId = videoUrl || videoId || this.closest('.video-card').querySelector('h5')?.textContent || 'video-' + Date.now();
                 
                 if (videoModal && videoPlayer) {
                     let embedUrl = '';
@@ -1078,18 +1082,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Mark video as complete
     const markCompleteBtn = document.getElementById('markComplete');
-    let currentVideoId = null;
-    
-    // Set current video when opening modal
-    const videoButtons = document.querySelectorAll('.btn-video');
-    if (videoButtons.length > 0) {
-        videoButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Store the video identifier (could be URL or title)
-                currentVideoId = this.getAttribute('data-video-url') || this.closest('.video-card').querySelector('h5')?.textContent || 'video-' + Date.now();
-            });
-        });
-    }
     
     if (markCompleteBtn) {
         markCompleteBtn.addEventListener('click', function() {
