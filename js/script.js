@@ -520,26 +520,41 @@ document.addEventListener('DOMContentLoaded', function() {
     const isSubscriptionPage = currentPath.includes('subscription.html') || currentHref.includes('subscription.html');
     
     if (isLearningPage || isSubscriptionPage) {
-        // Check if user is logged in
+        // Check if user is logged in OR admin is authenticated
         const user = getCurrentUser();
+        const isAdmin = sessionStorage.getItem('adminAuthenticated') === 'true';
         
-        console.log('Protected page - User found:', !!user);
+        console.log('Protected page - User found:', !!user, 'Admin:', isAdmin);
         
-        if (!user) {
-            console.log('No user, redirecting to login...');
+        if (!user && !isAdmin) {
+            console.log('No user or admin, redirecting to login...');
             window.location.href = 'login.html';
         } else {
-            console.log('User authenticated:', user.email);
+            console.log('User authenticated:', user?.email || 'Admin Access');
             
             // Display user name on learning portal
             const studentNameElement = document.getElementById('studentName');
-            if (studentNameElement && user.name) {
-                studentNameElement.textContent = user.name;
+            if (studentNameElement) {
+                if (isAdmin && !user) {
+                    studentNameElement.textContent = 'Administrator';
+                } else if (user && user.name) {
+                    studentNameElement.textContent = user.name;
+                }
             }
             
             // Refresh subscription from database and display status
             if (isLearningPage) {
-                refreshSubscriptionAndDisplay(user);
+                if (isAdmin && !user) {
+                    // Admin access - create a dummy user object for display purposes
+                    const adminUser = {
+                        name: 'Administrator',
+                        email: 'admin@manojtechnologies.in',
+                        subscription: null
+                    };
+                    displaySubscriptionStatus(adminUser);
+                } else if (user) {
+                    refreshSubscriptionAndDisplay(user);
+                }
             }
         }
     }
