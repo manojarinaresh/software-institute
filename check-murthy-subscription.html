@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Murthy Subscription</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2d3748;
+            margin-bottom: 30px;
+        }
+        button {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #5a67d8;
+        }
+        pre {
+            background: #2d3748;
+            color: #48bb78;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: 600;
+        }
+        .success {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        .error {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+        .info {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+        .warning {
+            background: #fef3c7;
+            color: #78350f;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-box">
+        <h1>🔍 Check Murthy Subscription Status</h1>
+        
+        <button onclick="checkUser()">1. Check User Exists</button>
+        <button onclick="checkAllSubscriptions()">2. Check All Subscriptions</button>
+        <button onclick="checkActiveSubscription()">3. Check Active Subscription</button>
+        <button onclick="checkView()">4. Check View Result</button>
+        <button onclick="fixIfNeeded()">5. Fix Status if Needed</button>
+        
+        <div id="results"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    
+    <script>
+        const resultsDiv = document.getElementById('results');
+        const EMAIL = 'murthy@gmail.com';
+
+        function showResults(title, data, type = 'info') {
+            const statusClass = type;
+            resultsDiv.innerHTML += `
+                <div class="status ${statusClass}">
+                    <h3>${title}</h3>
+                </div>
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+            `;
+        }
+
+        async function checkUser() {
+            resultsDiv.innerHTML = '';
+            showResults('Checking if user exists...', { email: EMAIL }, 'info');
+
+            try {
+                const { data: user, error } = await supabaseClient
+                    .from('users')
+                    .select('*')
+                    .eq('email', EMAIL)
+                    .single();
+
+                if (error) {
+                    showResults('❌ Error', { error: error.message }, 'error');
+                    return;
+                }
+
+                if (user) {
+                    showResults('✅ User Found', user, 'success');
+                    window.murthyUserId = user.id;
+                } else {
+                    showResults('❌ User Not Found', { message: 'No user with this email' }, 'error');
+                }
+            } catch (error) {
+                showResults('❌ Error', { error: error.message }, 'error');
+            }
+        }
+
+        async function checkAllSubscriptions() {
+            if (!window.murthyUserId) {
+                showResults('⚠️ Warning', { message: 'Run "Check User Exists" first' }, 'warning');
+                return;
+            }
+
+            try {
+                const { data: subscriptions, error } = await supabaseClient
+                    .from('subscriptions')
+                    .select('*')
+                    .eq('user_id', window.murthyUserId)
+                    .order('created_at', { ascending: false });
+
+                if (error) {
+                    showResults('❌ Error', { error: error.message }, 'error');
+                    return;
+                }
+
+                showResults(`📋 All Subscriptions (${subscriptions.length})`, subscriptions, 
+                    subscriptions.length > 0 ? 'success' : 'warning');
+            } catch (error) {
+                showResults('❌ Error', { error: error.message }, 'error');
+            }
+        }
+
+        async function checkActiveSubscription() {
+            if (!window.murthyUserId) {
+                showResults('⚠️ Warning', { message: 'Run "Check User Exists" first' }, 'warning');
+                return;
+            }
+
+            try {
+                const { data: subscriptions, error } = await supabaseClient
+                    .from('subscriptions')
+                    .select('*')
+                    .eq('user_id', window.murthyUserId)
+                    .eq('status', 'active')
+                    .order('created_at', { ascending: false });
+
+                if (error) {
+                    showResults('❌ Error', { error: error.message }, 'error');
+                    return;
+                }
+
+                if (subscriptions.length > 0) {
+                    const sub = subscriptions[0];
+                    const now = new Date();
+                    const expiryDate = new Date(sub.expiry_date);
+                    const isExpired = expiryDate < now;
+
+                    showResults(
+                        `🎯 Active Subscriptions (${subscriptions.length})`, 
+                        {
+                            subscriptions,
+                            current_status: sub.status,
+                            expiry_date: sub.expiry_date,
+                            is_actually_expired: isExpired,
+                            days_remaining: Math.ceil((expiryDate - now) / (1000 * 60 * 60 * 24))
+                        },
+                        isExpired ? 'warning' : 'success'
+                    );
+                } else {
+                    showResults('⚠️ No Active Subscriptions Found', 
+                        { message: 'No subscriptions with status="active"' }, 
+                        'warning');
+                }
+            } catch (error) {
+                showResults('❌ Error', { error: error.message }, 'error');
+            }
+        }
+
+        async function checkView() {
+            try {
+                const { data: viewResults, error } = await supabaseClient
+                    .from('active_subscriptions_view')
+                    .select('*')
+                    .eq('email', EMAIL);
+
+                if (error) {
+                    showResults('❌ Error checking view', { error: error.message }, 'error');
+                    return;
+                }
+
+                showResults(
+                    `👁️ View Query Result (${viewResults.length})`,
+                    viewResults,
+                    viewResults.length > 0 ? 'success' : 'warning'
+                );
+            } catch (error) {
+                showResults('❌ Error', { error: error.message }, 'error');
+            }
+        }
+
+        async function fixIfNeeded() {
+            if (!window.murthyUserId) {
+                showResults('⚠️ Warning', { message: 'Run "Check User Exists" first' }, 'warning');
+                return;
+            }
+
+            try {
+                // Get all subscriptions
+                const { data: allSubs, error: fetchError } = await supabaseClient
+                    .from('subscriptions')
+                    .select('*')
+                    .eq('user_id', window.murthyUserId);
+
+                if (fetchError) {
+                    showResults('❌ Error', { error: fetchError.message }, 'error');
+                    return;
+                }
+
+                if (allSubs.length === 0) {
+                    showResults('⚠️ No Subscriptions', 
+                        { message: 'User has no subscriptions at all' }, 
+                        'warning');
+                    return;
+                }
+
+                // Check and fix each subscription
+                const now = new Date();
+                let fixed = [];
+
+                for (const sub of allSubs) {
+                    const expiryDate = new Date(sub.expiry_date);
+                    const isExpired = expiryDate < now;
+                    const shouldBeActive = !isExpired;
+
+                    if (shouldBeActive && sub.status !== 'active') {
+                        // Fix: should be active but isn't
+                        const { error: updateError } = await supabaseClient
+                            .from('subscriptions')
+                            .update({ status: 'active' })
+                            .eq('id', sub.id);
+
+                        if (!updateError) {
+                            fixed.push({
+                                subscription_id: sub.id,
+                                old_status: sub.status,
+                                new_status: 'active',
+                                expiry_date: sub.expiry_date
+                            });
+                        }
+                    } else if (!shouldBeActive && sub.status === 'active') {
+                        // Fix: should be expired but is marked active
+                        const { error: updateError } = await supabaseClient
+                            .from('subscriptions')
+                            .update({ status: 'expired' })
+                            .eq('id', sub.id);
+
+                        if (!updateError) {
+                            fixed.push({
+                                subscription_id: sub.id,
+                                old_status: sub.status,
+                                new_status: 'expired',
+                                expiry_date: sub.expiry_date
+                            });
+                        }
+                    }
+                }
+
+                if (fixed.length > 0) {
+                    showResults('✅ Fixed Subscription Status', fixed, 'success');
+                    showResults('🔄 Refresh', 
+                        { message: 'Now run the checks again or refresh your admin portal' }, 
+                        'info');
+                } else {
+                    showResults('✓ All Good', 
+                        { message: 'All subscription statuses are correct' }, 
+                        'success');
+                }
+
+            } catch (error) {
+                showResults('❌ Error', { error: error.message }, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

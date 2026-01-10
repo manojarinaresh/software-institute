@@ -540,11 +540,35 @@ document.addEventListener('DOMContentLoaded', function() {
                 studentNameElement.textContent = user.name;
             }
             
-            // Display subscription status
+            // Refresh subscription from database and display status
             if (isLearningPage) {
-                displaySubscriptionStatus(user);
+                refreshSubscriptionAndDisplay(user);
             }
         }
+    }
+
+    // Function to refresh subscription from database
+    async function refreshSubscriptionAndDisplay(user) {
+        try {
+            // Fetch latest subscription from database
+            if (window.dbHelpers && user.id) {
+                const subscription = await window.dbHelpers.getUserSubscription(user.id);
+                
+                // Update user object with fresh subscription data
+                user.subscription = subscription;
+                
+                // Update localStorage with refreshed data
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                sessionStorage.setItem('currentUser', JSON.stringify(user));
+                
+                console.log('✅ Subscription refreshed from database:', subscription);
+            }
+        } catch (error) {
+            console.error('Error refreshing subscription:', error);
+        }
+        
+        // Display the subscription status (with updated data)
+        displaySubscriptionStatus(user);
     }
 
     // Function to display subscription status
@@ -558,7 +582,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Check if user has active subscription
         let hasActiveSubscription = false;
         
-        if (!user.subscription || !user.subscription.expiryDate) {
+        // Handle both database format (expiry_date) and old localStorage format (expiryDate)
+        const expiryDateValue = user.subscription?.expiry_date || user.subscription?.expiryDate;
+        
+        if (!user.subscription || !expiryDateValue) {
             // No subscription
             if (subStatus) {
                 subStatus.textContent = 'No Subscription';
@@ -572,7 +599,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } else {
             // Has subscription
-            const expiryDate = new Date(user.subscription.expiryDate);
+            const expiryDate = new Date(expiryDateValue);
             const today = new Date();
             const daysRemaining = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
             
