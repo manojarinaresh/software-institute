@@ -833,69 +833,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-                        window.emailService.sendSubscriptionEmail(user, subscriptionData);
-                        
-                        // Log email notification to database
-                        await window.dbHelpers.logEmailNotification('subscription', user.email, user.name, {
-                            plan: selectedPlan.plan,
-                            amount: selectedPlan.price,
-                            duration: selectedPlan.duration
-                        });
-                    }
-                    
-                    alert('🎉 Payment Successful!\n\nYour subscription has been activated.\nExpiry Date: ' + expiryDate.toLocaleDateString() + '\n\nEnjoy unlimited access to all courses!');
-                    closePaymentModal();
-                    
-                    setTimeout(() => {
-                        window.location.href = 'learning.html';
-                    }, 1000);
-                    
-                } else if (result.fallback) {
-                    // Supabase failed, use localStorage
-                    console.warn('⚠️ Supabase unavailable, using localStorage');
-                    saveSubscriptionToLocalStorage();
-                } else {
-                    alert('Error: ' + result.error);
-                }
-            } else {
-                // No Supabase or no user ID, use localStorage
-                console.warn('⚠️ Using localStorage for subscription');
-                saveSubscriptionToLocalStorage();
-            }
-            
-            // LocalStorage fallback function
-            function saveSubscriptionToLocalStorage() {
-                user.subscription = {
-                    plan: subscriptionData.plan,
-                    price: subscriptionData.amount,
-                    startDate: subscriptionData.startDate,
-                    expiryDate: subscriptionData.expiryDate,
-                    duration: subscriptionData.duration
-                };
-                
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                sessionStorage.setItem('currentUser', JSON.stringify(user));
-                
-                const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-                const userIndex = users.findIndex(u => u.email === user.email);
-                if (userIndex !== -1) {
-                    users[userIndex].subscription = user.subscription;
-                    localStorage.setItem('registeredUsers', JSON.stringify(users));
-                }
-                
-                if (window.emailService) {
-                    window.emailService.sendSubscriptionEmail(user, subscriptionData);
-                }
-                
-                alert('🎉 Payment Successful!\n\nYour subscription has been activated.\nExpiry Date: ' + expiryDate.toLocaleDateString() + '\n\nEnjoy unlimited access to all courses!');
-                closePaymentModal();
-                
-                setTimeout(() => {
-                    window.location.href = 'learning.html';
-                }, 1000);
-            }
-        });
-    }
     
     // Card number formatting
     const cardNumberInput = document.getElementById('cardNumber');
