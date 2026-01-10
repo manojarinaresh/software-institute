@@ -544,6 +544,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Admin-specific navigation control
             if (isAdmin && isLearningPage) {
+                console.log('Admin detected - hiding navigation links');
+                
                 // Hide regular user navigation items in header
                 const homeNav = document.getElementById('homeNav');
                 const aboutNav = document.getElementById('aboutNav');
@@ -551,11 +553,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 const contactNav = document.getElementById('contactNav');
                 const adminDashboardNav = document.getElementById('adminDashboardNav');
                 
-                if (homeNav) homeNav.style.display = 'none';
-                if (aboutNav) aboutNav.style.display = 'none';
-                if (coursesNav) coursesNav.style.display = 'none';
-                if (contactNav) contactNav.style.display = 'none';
-                if (adminDashboardNav) adminDashboardNav.style.display = 'block';
+                if (homeNav) {
+                    homeNav.style.display = 'none';
+                    console.log('Hid homeNav');
+                }
+                if (aboutNav) {
+                    aboutNav.style.display = 'none';
+                    console.log('Hid aboutNav');
+                }
+                if (coursesNav) {
+                    coursesNav.style.display = 'none';
+                    console.log('Hid coursesNav');
+                }
+                if (contactNav) {
+                    contactNav.style.display = 'none';
+                    console.log('Hid contactNav');
+                }
+                if (adminDashboardNav) {
+                    adminDashboardNav.style.display = 'block';
+                    console.log('Showed adminDashboardNav');
+                }
                 
                 // Hide regular user navigation items in footer
                 const homeFooterNav = document.getElementById('homeFooterNav');
@@ -564,10 +581,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 const contactFooterNav = document.getElementById('contactFooterNav');
                 const adminDashboardFooterNav = document.getElementById('adminDashboardFooterNav');
                 
-                if (homeFooterNav) homeFooterNav.style.display = 'none';
-                if (aboutFooterNav) aboutFooterNav.style.display = 'none';
-                if (coursesFooterNav) coursesFooterNav.style.display = 'none';
-                if (contactFooterNav) contactFooterNav.style.display = 'none';
+                if (homeFooterNav) {
+                    homeFooterNav.style.display = 'none';
+                    console.log('Hid homeFooterNav');
+                }
+                if (aboutFooterNav) {
+                    aboutFooterNav.style.display = 'none';
+                    console.log('Hid aboutFooterNav');
+                }
+                if (coursesFooterNav) {
+                    coursesFooterNav.style.display = 'none';
+                    console.log('Hid coursesFooterNav');
+                }
+                if (contactFooterNav) {
+                    contactFooterNav.style.display = 'none';
+                    console.log('Hid contactFooterNav');
+                }
                 if (adminDashboardFooterNav) adminDashboardFooterNav.style.display = 'block';
             }
             
