@@ -1,5 +1,5 @@
 // Razorpay Payment Integration for Manoj Technologies
-const RAZORPAY_KEY_ID = 'rzp_live_S26OYdvrzWznbR'; // Live Razorpay Key ID
+const RAZORPAY_KEY_ID = 'rzp_test_S270G31AswG5FL'; // Test Razorpay Key ID
 // Note: Never use Key Secret in frontend! It's only for server-side verification
 
 // Payment configuration
