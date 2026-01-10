@@ -6,6 +6,7 @@
     <title>Subscription Plans - Manoj Technologies</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/animations.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
@@ -316,64 +317,8 @@
         </div>
     </section>
 
-    <!-- Payment Modal -->
-    <div id="paymentModal" class="video-modal">
-        <div class="modal-content" style="max-width: 500px; max-height: 90vh; overflow-y: auto;">
-            <span class="close-modal">&times;</span>
-            <div style="padding: 30px;">
-                <h2 style="color: var(--primary-color); margin-bottom: 15px; font-size: 1.5rem;">Complete Your Payment</h2>
-                
-                <div class="payment-summary" style="margin-bottom: 20px;">
-                    <h3 style="font-size: 1rem; margin-bottom: 10px;">Payment Summary</h3>
-                    <div class="summary-row">
-                        <span>Plan:</span>
-                        <span id="paymentPlan">Monthly Plan</span>
-                    </div>
-                    <div class="summary-row">
-                        <span>Duration:</span>
-                        <span id="paymentDuration">30 days</span>
-                    </div>
-                    <div class="summary-row total">
-                        <span>Total Amount:</span>
-                        <span id="paymentAmount">₹2500.00</span>
-                    </div>
-                </div>
-
-                <form id="paymentForm" class="login-form">
-                    <div class="form-group" style="margin-bottom: 15px;">
-                        <label for="cardHolder" style="font-size: 0.9rem;">Cardholder Name</label>
-                        <input type="text" id="cardHolder" required placeholder="John Doe" style="padding: 10px;">
-                    </div>
-                    
-                    <div class="form-group" style="margin-bottom: 15px;">
-                        <label for="cardNumber" style="font-size: 0.9rem;">Card Number</label>
-                        <input type="text" id="cardNumber" required placeholder="1234 5678 9012 3456" maxlength="19" style="padding: 10px;">
-                    </div>
-                    
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label for="cardExpiry" style="font-size: 0.9rem;">Expiry Date</label>
-                            <input type="text" id="cardExpiry" required placeholder="MM/YY" maxlength="5" style="padding: 10px;">
-                        </div>
-                        
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label for="cardCVV" style="font-size: 0.9rem;">CVV</label>
-                            <input type="text" id="cardCVV" required placeholder="123" maxlength="3" style="padding: 10px;">
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-full" style="margin-top: 15px; padding: 12px;">
-                        Complete Payment
-                    </button>
-                    
-                    <p style="text-align: center; margin-top: 10px; font-size: 0.8rem; color: var(--text-light);">
-                        🔒 Your payment information is secure
-                    </p>
-                </form>
-            </div>
-        </div>
-    </div>
-
+    <!-- Note: Payment is now handled by Razorpay - no manual payment form needed -->
+    
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
@@ -407,6 +352,7 @@
     <script src="js/supabase-config.js"></script>
     <script src="js/supabase-db.js"></script>
     <script src="js/email-service.js"></script>
+    <script src="js/razorpay-payment.js"></script>
     <script src="js/script.js"></script>
 </body>
 </html>

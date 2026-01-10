@@ -786,118 +786,53 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ===== Subscription Payment Functionality =====
+    // ===== Subscription Payment Functionality (Razorpay Integration) =====
     const subscribeButtons = document.querySelectorAll('.btn-subscribe');
-    const paymentModal = document.getElementById('paymentModal');
-    const paymentForm = document.getElementById('paymentForm');
-    const closeModalBtn = document.querySelector('.close-modal');
-    
-    let selectedPlan = null;
     
     if (subscribeButtons.length > 0) {
         subscribeButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', async function() {
+                // Get current user
+                const user = getCurrentUser();
+                if (!user) {
+                    alert('Please login first to subscribe!');
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                // Get plan details from button attributes
                 const plan = this.getAttribute('data-plan');
-                const duration = parseInt(this.getAttribute('data-duration'));
-                const price = this.getAttribute('data-price');
+                const price = parseFloat(this.getAttribute('data-price'));
                 
-                selectedPlan = { plan, duration, price };
+                // Validate Razorpay integration is loaded
+                if (typeof Razorpay === 'undefined') {
+                    alert('Payment gateway is loading. Please try again in a moment.');
+                    console.error('Razorpay SDK not loaded');
+                    return;
+                }
                 
-                // Update payment modal
-                document.getElementById('paymentPlan').textContent = plan.charAt(0).toUpperCase() + plan.slice(1) + ' Plan';
-                document.getElementById('paymentDuration').textContent = duration + ' days';
-                document.getElementById('paymentAmount').textContent = '₹' + price + '.00';
+                if (typeof initializeRazorpayPayment === 'undefined') {
+                    alert('Payment module not loaded. Please refresh the page.');
+                    console.error('razorpay-payment.js not loaded');
+                    return;
+                }
                 
-                // Show modal
-                paymentModal.classList.add('active');
-                document.body.style.overflow = 'hidden';
+                // Initialize Razorpay payment
+                try {
+                    await initializeRazorpayPayment(
+                        plan,
+                        price,
+                        user.id,
+                        user.email,
+                        user.name
+                    );
+                } catch (error) {
+                    console.error('Error initializing payment:', error);
+                    alert('Unable to start payment process. Please try again.');
+                }
             });
         });
     }
-    
-    if (closeModalBtn && paymentModal) {
-        closeModalBtn.addEventListener('click', function() {
-            closePaymentModal();
-        });
-        
-        paymentModal.addEventListener('click', function(e) {
-            if (e.target === paymentModal) {
-                closePaymentModal();
-            }
-        });
-    }
-    
-    function closePaymentModal() {
-        if (paymentModal) {
-            paymentModal.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-    }
-    
-    // Payment form submission
-    if (paymentForm) {
-        paymentForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            // Get current user
-            const user = getCurrentUser();
-            if (!user) {
-                alert('Please login first!');
-                window.location.href = 'login.html';
-                return;
-            }
-            
-            // Get form data
-            const cardHolder = document.getElementById('cardHolder').value;
-            const cardNumber = document.getElementById('cardNumber').value;
-            const cardExpiry = document.getElementById('cardExpiry').value;
-            const cardCVV = document.getElementById('cardCVV').value;
-            
-            // Calculate expiry date
-            const expiryDate = new Date();
-            expiryDate.setDate(expiryDate.getDate() + selectedPlan.duration);
-            
-            // Get last 4 digits of card (for security)
-            const cardLast4 = cardNumber.slice(-4);
-            
-            // Create subscription data
-            const subscriptionData = {
-                plan: selectedPlan.plan.charAt(0).toUpperCase() + selectedPlan.plan.slice(1) + ' Plan',
-                amount: selectedPlan.price,
-                startDate: new Date().toISOString(),
-                expiryDate: expiryDate.toISOString(),
-                duration: selectedPlan.duration,
-                cardHolder: cardHolder,
-                cardNumber: cardNumber,
-                transactionId: 'TXN-' + Date.now()
-            };
-            
-            // Try Supabase first
-            if (window.dbHelpers && user.id) {
-                const paymentData = {
-                    transactionId: subscriptionData.transactionId,
-                    paymentMethod: 'card',
-                    cardLast4: cardLast4
-                };
-                
-                const result = await window.dbHelpers.createSubscription(
-                    user.id,
-                    selectedPlan.plan,
-                    parseFloat(selectedPlan.price),
-                    selectedPlan.plan, // duration type
-                    paymentData
-                );
-                
-                if (result.success) {
-                    console.log('✅ Subscription saved to Supabase');
-                    
-                    // Update local session
-                    user.subscription = result.subscription;
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                    sessionStorage.setItem('currentUser', JSON.stringify(user));
-                    
-                    // Send email notification
-                    if (window.emailService) {
                         window.emailService.sendSubscriptionEmail(user, subscriptionData);
                         
                         // Log email notification to database

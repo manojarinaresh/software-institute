@@ -164,5 +164,80 @@ SELECT
     (SELECT COUNT(*) FROM login_history WHERE login_time > NOW() - INTERVAL '24 hours') as logins_last_24h,
     (SELECT COUNT(*) FROM users WHERE created_at > NOW() - INTERVAL '7 days') as new_users_last_week;
 
--- Done! Your database is ready.
--- Next: Configure your website to use these tables.
+-- 11. Payment Transactions Table (for Razorpay integration)
+CREATE TABLE IF NOT EXISTS payment_transactions (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    razorpay_payment_id VARCHAR(100) UNIQUE,
+    razorpay_order_id VARCHAR(100),
+    razorpay_signature VARCHAR(255),
+    amount DECIMAL(10, 2) NOT NULL,
+    currency VARCHAR(10) DEFAULT 'INR',
+    plan VARCHAR(50) NOT NULL,
+    status VARCHAR(20) NOT NULL, -- 'success', 'failed', 'pending'
+    payment_method VARCHAR(50), -- 'card', 'upi', 'netbanking', 'wallet'
+    error_code VARCHAR(50),
+    error_description TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Add indexes for payment queries
+CREATE INDEX IF NOT EXISTS idx_payment_transactions_user_id ON payment_transactions(user_id);
+CREATE INDEX IF NOT EXISTS idx_payment_transactions_status ON payment_transactions(status);
+CREATE INDEX IF NOT EXISTS idx_payment_transactions_created ON payment_transactions(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_payment_razorpay_id ON payment_transactions(razorpay_payment_id);
+
+-- Enable RLS for payment transactions
+ALTER TABLE payment_transactions ENABLE ROW LEVEL SECURITY;
+
+-- Drop existing payment policies if they exist
+DROP POLICY IF EXISTS "Enable insert for payment transactions" ON payment_transactions;
+DROP POLICY IF EXISTS "Enable read for payment transactions" ON payment_transactions;
+
+-- Create policies for payment transactions
+CREATE POLICY "Enable insert for payment transactions" ON payment_transactions
+    FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Enable read for payment transactions" ON payment_transactions
+    FOR SELECT USING (true);
+
+-- Create view for successful payments with user details
+CREATE OR REPLACE VIEW successful_payments_view AS
+SELECT 
+    pt.id as transaction_id,
+    pt.razorpay_payment_id,
+    pt.amount,
+    pt.currency,
+    pt.plan,
+    pt.payment_method,
+    pt.created_at as payment_date,
+    u.name as user_name,
+    u.email as user_email,
+    u.phone as user_phone
+FROM payment_transactions pt
+JOIN users u ON pt.user_id = u.id
+WHERE pt.status = 'success'
+ORDER BY pt.created_at DESC;
+
+-- Update admin statistics view to include payment data
+DROP VIEW IF EXISTS admin_statistics;
+CREATE OR REPLACE VIEW admin_statistics AS
+SELECT 
+    (SELECT COUNT(*) FROM users) as total_users,
+    (SELECT COUNT(*) FROM subscriptions WHERE status = 'active') as active_subscriptions,
+    (SELECT COUNT(*) FROM subscriptions WHERE status = 'expired') as expired_subscriptions,
+    (SELECT SUM(amount) FROM subscriptions WHERE status = 'active') as total_active_revenue,
+    (SELECT SUM(amount) FROM subscriptions) as total_revenue,
+    (SELECT COUNT(*) FROM login_history WHERE login_time > NOW() - INTERVAL '24 hours') as logins_last_24h,
+    (SELECT COUNT(*) FROM users WHERE created_at > NOW() - INTERVAL '7 days') as new_users_last_week,
+    (SELECT COUNT(*) FROM payment_transactions WHERE status = 'success') as total_successful_payments,
+    (SELECT COUNT(*) FROM payment_transactions WHERE status = 'failed') as total_failed_payments,
+    (SELECT SUM(amount) FROM payment_transactions WHERE status = 'success') as total_payment_revenue,
+    (SELECT COUNT(*) FROM payment_transactions WHERE status = 'success' AND created_at > NOW() - INTERVAL '30 days') as payments_last_30_days;
+
+-- Done! Your database is ready with Razorpay payment integration.
+-- Next steps:
+-- 1. Run this SQL in Supabase SQL Editor
+-- 2. Get your Razorpay API keys from https://razorpay.com
+-- 3. Update js/razorpay-payment.js with your keys
+-- 4. Test payments using test mode first
