@@ -992,8 +992,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Support different video sources
                     switch(videoType) {
                         case 'youtube':
-                            // YouTube embed
-                            embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+                            // YouTube embed with minimal branding and controls
+                            embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&controls=1&fs=1`;
                             videoPlayer.src = embedUrl;
                             break;
                             
