@@ -372,6 +372,8 @@
     <script>
         // Password protection - get from localStorage or use default
         function getAdminPassword() {
+            // Reset to default password if needed (remove this line after first login)
+            localStorage.removeItem('adminPassword');
             return localStorage.getItem('adminPassword') || 'manojadmin123';
         }
         
