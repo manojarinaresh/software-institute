@@ -583,6 +583,7 @@
                             <th>Email</th>
                             <th>Phone</th>
                             <th>Registration Date</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -603,6 +604,12 @@
                         <td>${user.email}</td>
                         <td>${user.phone || '-'}</td>
                         <td>${date}</td>
+                        <td>
+                            <button class="btn-delete" onclick="deleteUser('${user.id}', '${user.name}')"
+                                    style="background: #ef4444; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                                🗑️ Delete
+                            </button>
+                        </td>
                     </tr>
                 `;
             });
@@ -649,6 +656,7 @@
                             <th>Expiry Date</th>
                             <th>Days Left</th>
                             <th>Status</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -676,6 +684,12 @@
                         <td>${expiryDate}</td>
                         <td>${daysLeft > 0 ? daysLeft : 0} days</td>
                         <td><span class="status-badge ${statusClass}">${sub.subscription_status}</span></td>
+                        <td>
+                            <button class="btn-delete" onclick="deleteSubscription('${sub.subscription_id}', '${sub.name}')"
+                                    style="background: #ef4444; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                                🗑️ Delete
+                            </button>
+                        </td>
                     </tr>
                 `;
             });
@@ -820,6 +834,59 @@
             a.href = url;
             a.download = filename;
             a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Delete User Function
+        async function deleteUser(userId, userName) {
+            if (!confirm(`Are you sure you want to delete user "${userName}"?\n\nThis will also delete:\n- All their subscriptions\n- Login history\n- Payment records\n\nThis action cannot be undone!`)) {
+                return;
+            }
+
+            try {
+                const { error } = await supabaseClient
+                    .from('users')
+                    .delete()
+                    .eq('id', userId);
+
+                if (error) throw error;
+
+                alert(`✅ User "${userName}" has been deleted successfully!`);
+                
+                // Reload all data
+                loadUsers();
+                loadSubscriptions();
+                loadStatistics();
+            } catch (error) {
+                alert(`❌ Error deleting user: ${error.message}`);
+                console.error('Delete user error:', error);
+            }
+        }
+
+        // Delete Subscription Function
+        async function deleteSubscription(subscriptionId, userName) {
+            if (!confirm(`Are you sure you want to delete the subscription for "${userName}"?\n\nThis action cannot be undone!`)) {
+                return;
+            }
+
+            try {
+                const { error } = await supabaseClient
+                    .from('subscriptions')
+                    .delete()
+                    .eq('id', subscriptionId);
+
+                if (error) throw error;
+
+                alert(`✅ Subscription for "${userName}" has been deleted successfully!`);
+                
+                // Reload subscriptions and statistics
+                loadSubscriptions();
+                loadStatistics();
+            } catch (error) {
+                alert(`❌ Error deleting subscription: ${error.message}`);
+                console.error('Delete subscription error:', error);
+            }
+        }
             window.URL.revokeObjectURL(url);
         }
 
