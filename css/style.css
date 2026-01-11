@@ -1611,10 +1611,16 @@ body {
 @media (max-width: 480px) {
     .login-container {
         padding: 30px 20px;
+        margin: 0 15px;
+        max-width: 100%;
     }
 
     .login-header h2 {
         font-size: 1.5rem;
+    }
+    
+    .login-section {
+        padding: 40px 0;
     }
 
     .portal-header {
