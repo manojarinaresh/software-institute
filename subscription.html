@@ -265,7 +265,7 @@
                         <li>✓ Progress tracking</li>
                         <li>✓ Monthly webinars</li>
                     </ul>
-                    <button class="btn btn-primary btn-subscribe" data-plan="monthly" data-duration="30" data-price="2500">
+                    <button class="btn btn-primary btn-subscribe" data-plan="monthly" data-duration="30" data-price="2500" onclick="handleSubscribe('monthly', 2500)">
                         Subscribe Now
                     </button>
                 </div>
@@ -288,7 +288,7 @@
                         <li>✓ Resume review</li>
                         <li>✓ Interview preparation</li>
                     </ul>
-                    <button class="btn btn-primary btn-subscribe" data-plan="quarterly" data-duration="90" data-price="6500">
+                    <button class="btn btn-primary btn-subscribe" data-plan="quarterly" data-duration="90" data-price="6500" onclick="handleSubscribe('quarterly', 6500)">
                         Subscribe Now
                     </button>
                 </div>
@@ -311,7 +311,7 @@
                         <li>✓ Exclusive community access</li>
                         <li>✓ Bonus courses included</li>
                     </ul>
-                    <button class="btn btn-primary btn-subscribe" data-plan="annual" data-duration="365" data-price="10000">
+                    <button class="btn btn-primary btn-subscribe" data-plan="annual" data-duration="365" data-price="10000" onclick="handleSubscribe('annual', 10000)">
                         Subscribe Now
                     </button>
                 </div>
@@ -375,5 +375,50 @@
     <script src="js/email-service.js"></script>
     <script src="js/razorpay-payment.js"></script>
     <script src="js/script.js"></script>
+    
+    <script>
+        // Inline Subscribe Handler for Mobile Compatibility
+        function handleSubscribe(plan, price) {
+            console.log('Mobile subscribe clicked:', plan, price);
+            
+            // Get current user from session
+            var userStr = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+            var user = userStr ? JSON.parse(userStr) : null;
+            
+            if (!user) {
+                alert('Please login first to subscribe!');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Check if Razorpay SDK is loaded
+            if (typeof Razorpay === 'undefined') {
+                alert('Payment gateway is loading. Please try again in a moment.');
+                console.error('Razorpay SDK not loaded');
+                return;
+            }
+            
+            // Check if payment module is loaded
+            if (typeof initializeRazorpayPayment === 'undefined') {
+                alert('Payment module not loaded. Please refresh the page.');
+                console.error('razorpay-payment.js not loaded');
+                return;
+            }
+            
+            // Initialize Razorpay payment
+            try {
+                initializeRazorpayPayment(
+                    plan,
+                    price,
+                    user.id,
+                    user.email,
+                    user.name
+                );
+            } catch (error) {
+                console.error('Error initializing payment:', error);
+                alert('Unable to start payment process. Please try again.');
+            }
+        }
+    </script>
 </body>
 </html>
