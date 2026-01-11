@@ -48,6 +48,50 @@
             menu.classList.toggle('active');
             hamburger.classList.toggle('active');
         }
+        
+        // Admin navigation and content control
+        document.addEventListener('DOMContentLoaded', function() {
+            var isAdmin = sessionStorage.getItem('adminAuthenticated') === 'true';
+            
+            if (isAdmin) {
+                // Hide header navigation items for admin
+                var homeNav = document.getElementById('homeNav');
+                var aboutNav = document.getElementById('aboutNav');
+                var coursesNav = document.getElementById('coursesNav');
+                var contactNav = document.getElementById('contactNav');
+                var adminDashboardNav = document.getElementById('adminDashboardNav');
+                
+                if (homeNav) homeNav.style.display = 'none';
+                if (aboutNav) aboutNav.style.display = 'none';
+                if (coursesNav) coursesNav.style.display = 'none';
+                if (contactNav) contactNav.style.display = 'none';
+                if (adminDashboardNav) adminDashboardNav.style.display = 'block';
+                
+                // Hide footer navigation items for admin
+                var homeFooterNav = document.getElementById('homeFooterNav');
+                var aboutFooterNav = document.getElementById('aboutFooterNav');
+                var coursesFooterNav = document.getElementById('coursesFooterNav');
+                var contactFooterNav = document.getElementById('contactFooterNav');
+                var adminDashboardFooterNav = document.getElementById('adminDashboardFooterNav');
+                
+                if (homeFooterNav) homeFooterNav.style.display = 'none';
+                if (aboutFooterNav) aboutFooterNav.style.display = 'none';
+                if (coursesFooterNav) coursesFooterNav.style.display = 'none';
+                if (contactFooterNav) contactFooterNav.style.display = 'none';
+                if (adminDashboardFooterNav) adminDashboardFooterNav.style.display = 'block';
+                
+                // Show premium content for admin
+                var premiumContent = document.getElementById('premiumContent');
+                var subscriptionUpsell = document.getElementById('subscriptionUpsell');
+                var noSubscriptionMessage = document.getElementById('noSubscriptionMessage');
+                var courseContent = document.getElementById('courseContent');
+                
+                if (premiumContent) premiumContent.style.display = 'block';
+                if (subscriptionUpsell) subscriptionUpsell.style.display = 'none';
+                if (noSubscriptionMessage) noSubscriptionMessage.style.display = 'none';
+                if (courseContent) courseContent.style.display = 'block';
+            }
+        });
     </script>
 
     <!-- Learning Portal Header -->
