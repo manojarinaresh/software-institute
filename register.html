@@ -72,7 +72,7 @@
                     <p>Join thousands of students learning with us</p>
                 </div>
                 
-                <form id="registerForm" class="login-form">
+                <form id="registerForm" class="login-form" onsubmit="handleRegister(event); return false;">
                     <div class="form-group">
                         <label for="fullName">Full Name *</label>
                         <input 
@@ -137,7 +137,7 @@
                         </label>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+                    <button type="submit" class="btn btn-primary btn-full" onclick="handleRegister(event)">Create Account</button>
                     
                     <div class="form-message" id="registerMessage"></div>
                 </form>
@@ -183,5 +183,100 @@
     <script src="js/supabase-db.js"></script>
     <script src="js/email-service.js"></script>
     <script src="js/script.js"></script>
+    
+    <script>
+        // Inline Register Handler for Mobile Compatibility
+        async function handleRegister(e) {
+            if (e) e.preventDefault();
+            
+            var fullName = document.getElementById('fullName').value.trim();
+            var email = document.getElementById('email').value.trim();
+            var phone = document.getElementById('phone').value.trim();
+            var password = document.getElementById('password').value;
+            var confirmPassword = document.getElementById('confirmPassword').value;
+            var agreeTerms = document.getElementById('agreeTerms').checked;
+            var messageDiv = document.getElementById('registerMessage');
+            
+            console.log('Mobile registration attempt:', email);
+            
+            // Validation
+            if (!fullName || !email || !phone || !password || !confirmPassword) {
+                messageDiv.className = 'form-message error';
+                messageDiv.textContent = '✗ Please fill in all fields.';
+                messageDiv.style.display = 'block';
+                return false;
+            }
+            
+            if (password !== confirmPassword) {
+                messageDiv.className = 'form-message error';
+                messageDiv.textContent = '✗ Passwords do not match.';
+                messageDiv.style.display = 'block';
+                return false;
+            }
+            
+            if (password.length < 6) {
+                messageDiv.className = 'form-message error';
+                messageDiv.textContent = '✗ Password must be at least 6 characters.';
+                messageDiv.style.display = 'block';
+                return false;
+            }
+            
+            if (!agreeTerms) {
+                messageDiv.className = 'form-message error';
+                messageDiv.textContent = '✗ Please agree to the Terms & Conditions.';
+                messageDiv.style.display = 'block';
+                return false;
+            }
+            
+            // Show loading state
+            messageDiv.className = 'form-message';
+            messageDiv.textContent = 'Creating your account...';
+            messageDiv.style.display = 'block';
+            
+            try {
+                if (window.dbHelpers) {
+                    var result = await window.dbHelpers.registerUser(fullName, email, phone, password);
+                    
+                    if (result.success) {
+                        console.log('✅ Registration successful');
+                        
+                        messageDiv.className = 'form-message success';
+                        messageDiv.textContent = '✓ Account created successfully! Redirecting to login...';
+                        messageDiv.style.display = 'block';
+                        
+                        // Send registration email notification
+                        if (window.emailService) {
+                            window.emailService.sendRegistrationEmail({
+                                name: fullName,
+                                email: email,
+                                phone: phone,
+                                registrationDate: new Date().toISOString()
+                            });
+                        }
+                        
+                        setTimeout(function() {
+                            window.location.href = 'login.html';
+                        }, 1500);
+                        
+                    } else {
+                        messageDiv.className = 'form-message error';
+                        messageDiv.textContent = '✗ ' + (result.error || 'Registration failed. Please try again.');
+                        messageDiv.style.display = 'block';
+                    }
+                } else {
+                    messageDiv.className = 'form-message error';
+                    messageDiv.textContent = '✗ Database connection unavailable. Please try again.';
+                    messageDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                messageDiv.className = 'form-message error';
+                messageDiv.textContent = '✗ Registration failed. Please try again.';
+                messageDiv.style.display = 'block';
+            }
+            
+            return false;
+        }
+    </script>
 </body>
 </html>

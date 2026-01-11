@@ -73,7 +73,7 @@
                     <p>Access your learning portal and course materials</p>
                 </div>
                 
-                <form id="loginForm" class="login-form" method="post" onsubmit="return false;">
+                <form id="loginForm" class="login-form" method="post" onsubmit="handleLogin(event); return false;">
                     <div class="form-group">
                         <label for="email">Email Address</label>
                         <input 
@@ -106,7 +106,7 @@
                         <a href="#" class="forgot-password" onclick="openForgotPasswordModal(); return false;">Forgot Password?</a>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-full">Login</button>
+                    <button type="submit" class="btn btn-primary btn-full" onclick="handleLogin(event)">Login</button>
                     
                     <div class="form-message" id="loginMessage"></div>
                 </form>
@@ -177,6 +177,79 @@
     <script src="js/script.js"></script>
     
     <script>
+        // Inline Login Handler for Mobile Compatibility
+        async function handleLogin(e) {
+            if (e) e.preventDefault();
+            
+            var email = document.getElementById('email').value.trim();
+            var password = document.getElementById('password').value;
+            var messageDiv = document.getElementById('loginMessage');
+            
+            console.log('Mobile login attempt:', email);
+            
+            if (!email || !password) {
+                messageDiv.className = 'form-message error';
+                messageDiv.textContent = '✗ Please enter both email and password.';
+                messageDiv.style.display = 'block';
+                return false;
+            }
+            
+            // Show loading state
+            messageDiv.className = 'form-message';
+            messageDiv.textContent = 'Logging in...';
+            messageDiv.style.display = 'block';
+            
+            try {
+                if (window.dbHelpers) {
+                    var result = await window.dbHelpers.loginUser(email, password);
+                    
+                    if (result.success) {
+                        console.log('✅ Login successful');
+                        
+                        // Get user subscription from database
+                        var subscription = await window.dbHelpers.getUserSubscription(result.user.id);
+                        
+                        // Store user session
+                        var userData = {
+                            id: result.user.id,
+                            email: result.user.email,
+                            name: result.user.name,
+                            phone: result.user.phone,
+                            subscription: subscription,
+                            loginTime: new Date().toISOString()
+                        };
+                        
+                        localStorage.setItem('currentUser', JSON.stringify(userData));
+                        sessionStorage.setItem('currentUser', JSON.stringify(userData));
+                        
+                        messageDiv.className = 'form-message success';
+                        messageDiv.textContent = '✓ Login successful! Redirecting...';
+                        messageDiv.style.display = 'block';
+                        
+                        setTimeout(function() {
+                            window.location.href = 'learning.html';
+                        }, 500);
+                        
+                    } else {
+                        messageDiv.className = 'form-message error';
+                        messageDiv.textContent = '✗ ' + (result.error || 'Invalid email or password.');
+                        messageDiv.style.display = 'block';
+                    }
+                } else {
+                    messageDiv.className = 'form-message error';
+                    messageDiv.textContent = '✗ Database connection unavailable. Please try again.';
+                    messageDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                messageDiv.className = 'form-message error';
+                messageDiv.textContent = '✗ Login failed. Please try again.';
+                messageDiv.style.display = 'block';
+            }
+            
+            return false;
+        }
+        
         // Forgot Password Modal Functions
         function openForgotPasswordModal() {
             document.getElementById('forgotPasswordModal').style.display = 'flex';
