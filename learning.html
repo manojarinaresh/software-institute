@@ -31,7 +31,7 @@
                 <li id="coursesNav"><a href="courses.html">Courses</a></li>
                 <li id="contactNav"><a href="contact.html">Contact</a></li>
                 <li id="adminDashboardNav" style="display: none;"><a href="admin.html">📊 Admin Dashboard</a></li>
-                <li><a href="#" id="logoutBtn" class="btn-logout">Logout</a></li>
+                <li><a href="#" id="logoutBtn" class="btn-logout" onclick="handleLogout(); return false;">Logout</a></li>
             </ul>
             <div class="hamburger" onclick="toggleMobileMenu()">
                 <span></span>
@@ -47,6 +47,19 @@
             var hamburger = document.querySelector('.hamburger');
             menu.classList.toggle('active');
             hamburger.classList.toggle('active');
+        }
+        
+        // Logout function
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                // Clear all session data
+                localStorage.removeItem('currentUser');
+                sessionStorage.removeItem('currentUser');
+                sessionStorage.removeItem('adminAuthenticated');
+                
+                // Redirect to login page
+                window.location.href = 'login.html';
+            }
         }
         
         // Admin navigation and content control
