@@ -422,13 +422,24 @@
         
         // View Plans Button Handler for Mobile
         function showPlansSection() {
+            console.log('showPlansSection called');
             var courseSection = document.getElementById('courseSection');
             var plansSection = document.getElementById('plansSection');
             
+            console.log('courseSection:', courseSection);
+            console.log('plansSection:', plansSection);
+            
             if (courseSection && plansSection) {
+                console.log('Both sections found, hiding courseSection and showing plansSection');
                 courseSection.style.display = 'none';
                 plansSection.style.display = 'block';
-                plansSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+                // Scroll to plans section
+                setTimeout(function() {
+                    plansSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            } else {
+                console.error('Could not find courseSection or plansSection');
             }
         }
     </script>

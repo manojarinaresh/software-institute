@@ -2111,4 +2111,64 @@ body {
         font-size: 1.1rem;
         padding: 8px 18px;
     }
+    
+    /* Mobile Subscription Page */
+    .course-overview-card {
+        padding: 25px 15px;
+        border-radius: 12px;
+        max-width: 100%;
+    }
+    
+    .course-overview-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .course-overview-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .course-overview-section {
+        padding: 30px 0;
+    }
+    
+    .subscription-section {
+        padding: 30px 0;
+    }
+    
+    .subscription-plans {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .plan-card {
+        padding: 25px 20px;
+        border-radius: 12px;
+    }
+    
+    .plan-card.featured {
+        transform: scale(1);
+    }
+    
+    .plan-card.featured:hover {
+        transform: scale(1);
+    }
+    
+    #viewPlansBtn {
+        width: 100%;
+        padding: 18px 20px !important;
+        font-size: 1rem !important;
+        min-height: 54px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .currency {
+        font-size: 0.8rem;
+    }
+    
+    .amount {
+        font-size: 2rem;
+    }
 }
