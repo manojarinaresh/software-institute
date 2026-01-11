@@ -51,14 +51,35 @@
         
         // Logout function
         function handleLogout() {
+            console.log('Logout clicked');
             if (confirm('Are you sure you want to logout?')) {
-                // Clear all session data
+                console.log('Logout confirmed');
+                
+                // Clear all session and local storage
                 localStorage.removeItem('currentUser');
                 sessionStorage.removeItem('currentUser');
                 sessionStorage.removeItem('adminAuthenticated');
                 
-                // Redirect to login page
-                window.location.href = 'login.html';
+                // Clear any cached user data
+                localStorage.removeItem('registeredUsers');
+                localStorage.removeItem('userSession');
+                sessionStorage.removeItem('userSession');
+                
+                // Clear subscriptions
+                localStorage.removeItem('subscription');
+                sessionStorage.removeItem('subscription');
+                
+                console.log('All data cleared');
+                
+                // Add no-cache headers to prevent caching
+                if (window.history) {
+                    window.history.replaceState(null, null, window.location.href);
+                }
+                
+                // Redirect to login page with a small delay
+                setTimeout(function() {
+                    window.location.href = 'login.html?logout=true';
+                }, 300);
             }
         }
         

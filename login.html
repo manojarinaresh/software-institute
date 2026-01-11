@@ -44,6 +44,35 @@
     
     <!-- Inline Mobile Menu Script -->
     <script>
+        // Clear all session data on login page load (for logout scenario)
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Login page loaded - checking for logout');
+            
+            // If logout parameter in URL, show message and clear all data
+            var urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('logout') === 'true') {
+                console.log('Logout detected, clearing all data');
+                
+                // Clear all storage
+                localStorage.clear();
+                sessionStorage.clear();
+                
+                // Show logout message
+                setTimeout(function() {
+                    var messageDiv = document.getElementById('loginMessage');
+                    if (messageDiv) {
+                        messageDiv.className = 'form-message success';
+                        messageDiv.textContent = '✓ You have been logged out successfully.';
+                        messageDiv.style.display = 'block';
+                        
+                        setTimeout(function() {
+                            messageDiv.style.display = 'none';
+                        }, 3000);
+                    }
+                }, 100);
+            }
+        });
+        
         function toggleMobileMenu() {
             var menu = document.querySelector('.nav-menu');
             var hamburger = document.querySelector('.hamburger');
