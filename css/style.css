@@ -94,6 +94,10 @@ body {
     display: none;
     flex-direction: column;
     cursor: pointer;
+    z-index: 1001;
+    position: relative;
+    padding: 10px;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .hamburger span {
@@ -102,6 +106,7 @@ body {
     background-color: var(--text-dark);
     margin: 3px 0;
     transition: 0.3s;
+    pointer-events: none;
 }
 
 /* ===== Hero Section ===== */
