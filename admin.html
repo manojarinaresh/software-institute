@@ -258,8 +258,22 @@
                 <li id="myPortalNav" style="display: none;"><a href="learning.html">📚 My Portal</a></li>
                 <li id="logoutNav" style="display: none;"><a href="#" onclick="logoutAdmin()" style="color: #e53e3e;">🚪 Logout</a></li>
             </ul>
+            <div class="hamburger" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </nav>
+    
+    <script>
+        function toggleMobileMenu() {
+            var menu = document.querySelector('.nav-menu');
+            var hamburger = document.querySelector('.hamburger');
+            menu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+    </script>
 
     <!-- Password Protection Modal -->
     <div id="passwordModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; justify-content: center; align-items: center;">
