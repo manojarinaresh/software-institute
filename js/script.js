@@ -3,12 +3,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
 
-    if (hamburger) {
-        hamburger.addEventListener('click', function() {
-            navMenu.classList.toggle('active');
+    if (hamburger && navMenu) {
+        console.log('Hamburger menu initialized');
+        
+        hamburger.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             
-            // Animate hamburger icon
+            console.log('Hamburger clicked');
+            navMenu.classList.toggle('active');
             this.classList.toggle('active');
+            
+            console.log('Menu active:', navMenu.classList.contains('active'));
         });
 
         // Close menu when clicking on a link
@@ -19,6 +25,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 hamburger.classList.remove('active');
             });
         });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                navMenu.classList.remove('active');
+                hamburger.classList.remove('active');
+            }
+        });
+    } else {
+        console.log('Hamburger or navMenu not found');
     }
 
     // Hide admin link if regular user is logged in
