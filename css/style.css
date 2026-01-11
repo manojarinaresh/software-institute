@@ -1640,6 +1640,30 @@ body {
     .login-section {
         padding: 40px 0;
     }
+    
+    .form-options {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    
+    .forgot-password {
+        padding: 10px 0;
+        display: inline-block;
+        min-height: 44px;
+        line-height: 24px;
+    }
+    
+    .login-footer {
+        padding: 20px 0;
+    }
+    
+    .login-footer a {
+        padding: 10px;
+        display: inline-block;
+        min-height: 44px;
+        line-height: 24px;
+    }
 
     .portal-header {
         padding: 30px 0;
