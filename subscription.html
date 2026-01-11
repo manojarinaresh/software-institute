@@ -231,7 +231,7 @@
                     </div>
 
                     <div style="text-align: center;">
-                        <button class="btn btn-primary btn-large" id="viewPlansBtn" style="padding: 15px 40px; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                        <button class="btn btn-primary btn-large" id="viewPlansBtn" onclick="showPlansSection()" style="padding: 15px 40px; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
                             View Subscription Plans →
                         </button>
                     </div>
@@ -417,6 +417,18 @@
             } catch (error) {
                 console.error('Error initializing payment:', error);
                 alert('Unable to start payment process. Please try again.');
+            }
+        }
+        
+        // View Plans Button Handler for Mobile
+        function showPlansSection() {
+            var courseSection = document.getElementById('courseSection');
+            var plansSection = document.getElementById('plansSection');
+            
+            if (courseSection && plansSection) {
+                courseSection.style.display = 'none';
+                plansSection.style.display = 'block';
+                plansSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
     </script>
