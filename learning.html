@@ -101,11 +101,8 @@
                 if (noSubscriptionMessage) {
                     noSubscriptionMessage.style.display = 'none';
                 }
-            } else {
-                console.log('No user logged in, redirecting to login...');
-                // Redirect to login if no user
-                window.location.href = 'login.html';
             }
+            // Note: Don't redirect here - script.js handles page protection
         });
         
         // Admin navigation and content control
