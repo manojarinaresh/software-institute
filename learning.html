@@ -56,28 +56,38 @@
                 e.stopPropagation();
             }
             
-            console.log('Logout button clicked');
-            
-            var confirmLogout = confirm('Are you sure you want to logout?');
-            console.log('User confirmed logout:', confirmLogout);
-            
-            if (confirmLogout) {
-                console.log('Clearing all user data...');
-                
-                // Clear all session and local storage
+            if (confirm('Are you sure you want to logout?')) {
+                // Clear all storage
                 localStorage.clear();
                 sessionStorage.clear();
                 
-                console.log('Data cleared, redirecting to login...');
-                
-                // Force redirect without delay
-                window.location.replace('login.html?logout=true');
-            } else {
-                console.log('Logout cancelled by user');
+                // Redirect
+                window.location.href = 'login.html?logout=true';
             }
             
             return false;
         }
+        
+        // Show course content immediately on page load for logged in users
+        (function() {
+            var user = null;
+            try {
+                user = JSON.parse(localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser'));
+            } catch(e) {}
+            
+            var isAdmin = sessionStorage.getItem('adminAuthenticated') === 'true';
+            
+            // If user is logged in or admin, show course content immediately
+            if (user || isAdmin) {
+                var courseContent = document.getElementById('courseContent');
+                var noSubscriptionMessage = document.getElementById('noSubscriptionMessage');
+                
+                if (courseContent) courseContent.style.display = 'block';
+                if (noSubscriptionMessage) noSubscriptionMessage.style.display = 'none';
+                
+                console.log('Course content shown for logged in user');
+            }
+        })();
         
         // Admin navigation and content control
         document.addEventListener('DOMContentLoaded', function() {
