@@ -184,16 +184,7 @@
         
         // Close menu when any nav link is clicked (except logout)
         document.addEventListener('DOMContentLoaded', function() {
-            var navLinks = document.querySelectorAll('.nav-menu a:not(#logoutBtn)');
-            navLinks.forEach(function(link) {
-                link.addEventListener('click', function(e) {
-                    // Don't prevent default - let navigation happen naturally
-                    var menu = document.querySelector('.nav-menu');
-                    var hamburger = document.querySelector('.hamburger');
-                    if (menu) menu.classList.remove('active');
-                    if (hamburger) hamburger.classList.remove('active');
-                });
-            });
+
         });
     </script>
 
