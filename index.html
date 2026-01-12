@@ -214,5 +214,11 @@
     </footer>
 
     <script src="js/script.js"></script>
+    <script>
+        // Debug: Track user session on page load
+        console.log('=== INDEX.HTML LOADED ===');
+        console.log('localStorage.currentUser:', localStorage.getItem('currentUser') ? 'EXISTS' : 'NULL');
+        console.log('sessionStorage.currentUser:', sessionStorage.getItem('currentUser') ? 'EXISTS' : 'NULL');
+    </script>
 </body>
 </html>
