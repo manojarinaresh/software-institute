@@ -621,8 +621,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }, 100);
             }
-                if (adminDashboardFooterNav) adminDashboardFooterNav.style.display = 'block';
-            }
             
             // Refresh subscription from database and display status
             if (isLearningPage) {
