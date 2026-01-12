@@ -68,26 +68,45 @@
             return false;
         }
         
-        // Show course content immediately on page load for logged in users
-        (function() {
+        // Show course content immediately when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded - checking user session');
+            
             var user = null;
             try {
-                user = JSON.parse(localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser'));
-            } catch(e) {}
+                var userStr = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+                if (userStr) {
+                    user = JSON.parse(userStr);
+                }
+            } catch(e) {
+                console.error('Error parsing user data:', e);
+            }
             
             var isAdmin = sessionStorage.getItem('adminAuthenticated') === 'true';
+            
+            console.log('User found:', !!user, 'Admin:', isAdmin);
             
             // If user is logged in or admin, show course content immediately
             if (user || isAdmin) {
                 var courseContent = document.getElementById('courseContent');
                 var noSubscriptionMessage = document.getElementById('noSubscriptionMessage');
                 
-                if (courseContent) courseContent.style.display = 'block';
-                if (noSubscriptionMessage) noSubscriptionMessage.style.display = 'none';
+                console.log('courseContent element:', courseContent);
+                console.log('noSubscriptionMessage element:', noSubscriptionMessage);
                 
-                console.log('Course content shown for logged in user');
+                if (courseContent) {
+                    courseContent.style.display = 'block';
+                    console.log('✅ Course content shown');
+                }
+                if (noSubscriptionMessage) {
+                    noSubscriptionMessage.style.display = 'none';
+                }
+            } else {
+                console.log('No user logged in, redirecting to login...');
+                // Redirect to login if no user
+                window.location.href = 'login.html';
             }
-        })();
+        });
         
         // Admin navigation and content control
         document.addEventListener('DOMContentLoaded', function() {
