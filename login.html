@@ -188,13 +188,25 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
     <script src="js/supabase-config.js"></script>
     <script src="js/supabase-db.js"></script>
     <script src="js/email-service.js"></script>
     <script src="js/script.js"></script>
     
     <script>
+        // Wait for all scripts to load before allowing login
+        let scriptsLoaded = false;
+        
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                scriptsLoaded = true;
+                console.log('All scripts loaded');
+                console.log('dbHelpers available:', !!window.dbHelpers);
+                console.log('supabaseClient available:', !!window.supabaseClient);
+            }, 1000);
+        });
+        
         // Inline Login Handler for Mobile Compatibility
         async function handleLogin(e) {
             if (e) e.preventDefault();
@@ -208,6 +220,14 @@
             if (!email || !password) {
                 messageDiv.className = 'form-message error';
                 messageDiv.textContent = '✗ Please enter both email and password.';
+                messageDiv.style.display = 'block';
+                return false;
+            }
+            
+            // Check if scripts are loaded
+            if (!scriptsLoaded) {
+                messageDiv.className = 'form-message error';
+                messageDiv.textContent = '⏳ Loading... Please wait a moment and try again.';
                 messageDiv.style.display = 'block';
                 return false;
             }
