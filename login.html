@@ -218,10 +218,17 @@
             messageDiv.style.display = 'block';
             
             try {
-                if (window.dbHelpers) {
+                // Debug: Check if dbHelpers is available
+                console.log('window.dbHelpers available:', !!window.dbHelpers);
+                console.log('window.supabaseClient available:', !!window.supabaseClient);
+                console.log('window.isSupabaseEnabled:', typeof window.isSupabaseEnabled === 'function' ? window.isSupabaseEnabled() : 'function not found');
+                
+                if (window.dbHelpers && typeof window.dbHelpers.loginUser === 'function') {
                     var result = await window.dbHelpers.loginUser(email, password);
                     
-                    if (result.success) {
+                    console.log('Login result:', result);
+                    
+                    if (result && result.success) {
                         console.log('✅ Login successful');
                         
                         // Get user subscription from database
@@ -250,10 +257,11 @@
                         
                     } else {
                         messageDiv.className = 'form-message error';
-                        messageDiv.textContent = '✗ ' + (result.error || 'Invalid email or password.');
+                        messageDiv.textContent = '✗ ' + (result && result.error ? result.error : 'Invalid email or password.');
                         messageDiv.style.display = 'block';
                     }
                 } else {
+                    console.error('dbHelpers not available');
                     messageDiv.className = 'form-message error';
                     messageDiv.textContent = '✗ Database connection unavailable. Please try again.';
                     messageDiv.style.display = 'block';
