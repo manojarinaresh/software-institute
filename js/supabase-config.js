@@ -1,10 +1,7 @@
 // Supabase Configuration
 // Project: Manoj Technologies Learning Platform
 
-const SUPABASE_CONFIG = {
-    url: 'https://tarxywwovixlgjzddkke.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRhcnh5d3dvdml4bGdqemRka2tlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc4Njg1MjUsImV4cCI6MjA4MzQ0NDUyNX0.BAnDV7JhDIOWqL6mHHnbEBHAg4e35ixGaTR1Qep2mqI'
-};
+
 
 // Initialize Supabase client
 let supabaseClient = null;
